@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import quarkus.soccer.game.team.util.Range;
 import quarkus.soccer.game.team.validation.Validation;
 
 import javax.persistence.CascadeType;
@@ -13,10 +14,9 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -37,11 +37,11 @@ public class TeamDO extends PanacheEntity {
     private String nickName;
 
     @NotBlank(message = Validation.TEAM_FOUNDED_BLANK)
+    @Past(message = Validation.TEAM_FOUNDED_PAST)
     private LocalDate founded;
 
-    @Min(value = 1, message = Validation.TEAM_LEVEL_INVALID)
-    @Max(value = 10, message = Validation.TEAM_LEVEL_INVALID)
-    private int level;
+    @Range(min = 1.0, max = 10.0)
+    private double level;
 
     @NotBlank(message = Validation.TEAM_PICTURE_BLANK)
     private String picture;
