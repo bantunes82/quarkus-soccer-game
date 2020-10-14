@@ -66,6 +66,12 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>pl.pojo</groupId>
+      <artifactId>pojo-tester</artifactId>
+      <version>0.7.6</version>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
   <build>
