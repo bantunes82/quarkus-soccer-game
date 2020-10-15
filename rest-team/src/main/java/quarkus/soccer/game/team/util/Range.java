@@ -1,6 +1,6 @@
 package quarkus.soccer.game.team.util;
 
-import quarkus.soccer.game.team.validation.Validation;
+import quarkus.soccer.game.team.constants.Validation;
 
 import javax.validation.Constraint;
 import java.lang.annotation.Documented;

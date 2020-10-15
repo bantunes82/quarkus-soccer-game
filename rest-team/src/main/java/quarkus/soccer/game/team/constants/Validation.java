@@ -1,4 +1,4 @@
-package quarkus.soccer.game.team.validation;
+package quarkus.soccer.game.team.constants;
 
 public class Validation {
     public static final String TEAM_NAME_BLANK = "{constraint.team.nameNotBlank}";;

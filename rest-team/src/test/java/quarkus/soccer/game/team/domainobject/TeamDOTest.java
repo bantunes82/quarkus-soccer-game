@@ -3,9 +3,7 @@ package quarkus.soccer.game.team.domainobject;
 
 import org.junit.jupiter.api.Test;
 import pl.pojo.tester.api.assertion.Method;
-
 import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
@@ -13,22 +11,25 @@ import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 class TeamDOTest {
 
     private final String teamName = "Sport Club Corinthians Paulista";
-    private final CountryDO countryDO = new CountryDO("Brasil", "BR");
+    private final CountryDO countryDO = new CountryDO(1l,"Brasil", "BR");
+    private final Long id = 1L;
 
     private final TeamDO team1 = TeamDO.builder()
+            .id(id)
             .name(teamName)
             .nickName("Timao")
             .founded(LocalDate.of(1910, 9, 1))
-            .level(9)
+            .level(9.8)
             .picture("https://conteudo.imguol.com.br//c/esporte/futebol/times/desktop/corinthians.jpg")
             .countryDO(countryDO)
             .build();
 
     private final TeamDO team2 = TeamDO.builder()
+            .id(id)
             .name(teamName)
             .nickName("Time do Povo")
             .founded(LocalDate.of(1910, 9, 2))
-            .level(8)
+            .level(8.2)
             .picture("https://conteudo.imguol.com.br//c/esporte/futebol/times/desktop/cruzeiro.jpg")
             .countryDO(countryDO)
             .build();
@@ -50,6 +51,13 @@ class TeamDOTest {
 
 
     @Test
+    public void equals_CustomWithIdDifferent() {
+        team2.setId(2L);
+        assertNotEquals(team1, team2);
+    }
+
+
+    @Test
     public void equals_CustomWithNameDifferent() {
         team2.setName("Cruzeiro");
         assertNotEquals(team1, team2);
@@ -58,7 +66,7 @@ class TeamDOTest {
 
     @Test
     public void equals_CustomWithCountryDifferent() {
-        team2.setCountryDO(new CountryDO("Argentina", "AR"));
+        team2.setCountryDO(new CountryDO(2l,"Argentina", "AR"));
         assertNotEquals(team1, team2);
     }
 
