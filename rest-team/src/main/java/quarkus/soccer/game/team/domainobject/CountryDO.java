@@ -32,7 +32,7 @@ public class CountryDO {
     private String name;
 
     @NotBlank(message = Validation.COUNTRY_CODE_BLANK)
-    @Size(min = 2, max = 3, message = Validation.COUNTRY_CODE_SIZE)
+    @Size(min = 2, max = 2, message = Validation.COUNTRY_CODE_SIZE)
     private String code;
 
 
