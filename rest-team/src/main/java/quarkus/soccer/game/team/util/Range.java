@@ -3,6 +3,7 @@ package quarkus.soccer.game.team.util;
 import quarkus.soccer.game.team.constants.Validation;
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -24,5 +25,9 @@ public @interface Range
     double min() default Double.MIN_VALUE;
 
     double max() default Double.MAX_VALUE;
+
+    Class<?>[] groups() default { };
+
+    Class<? extends Payload>[] payload() default { };
 
 }

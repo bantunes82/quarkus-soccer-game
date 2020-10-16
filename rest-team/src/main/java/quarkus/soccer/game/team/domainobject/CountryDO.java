@@ -2,6 +2,7 @@ package quarkus.soccer.game.team.domainobject;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import quarkus.soccer.game.team.constants.Validation;
 
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import javax.validation.constraints.Size;
 })
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CountryDO {
 
     @Id
