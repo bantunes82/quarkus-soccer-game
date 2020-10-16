@@ -1,6 +1,7 @@
 package quarkus.soccer.game.team.dataaccessobject;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Sort;
 import quarkus.soccer.game.team.domainobject.TeamDO;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -20,8 +21,12 @@ public class TeamRepository implements PanacheRepository<TeamDO> {
         return findAll().page(randomVillain, 1).firstResultOptional();
     }
 
-    public Optional<TeamDO> findByNameAndByCountry(String name, String countryCode) {
+    public Optional<TeamDO> findByNameAndByCountryCode(String name, String countryCode) {
         return find("name = ?1 and countryDO.code = ?2", name, countryCode).firstResultOptional();
+    }
+
+    public List<TeamDO> findByCountryCode(String countryCode) {
+        return find("countryDO.code = ?1", Sort.by("name"), countryCode).list();
     }
 
     public List<TeamDO> findByName(String name) {
