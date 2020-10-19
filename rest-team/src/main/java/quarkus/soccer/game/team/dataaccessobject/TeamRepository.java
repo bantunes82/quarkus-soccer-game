@@ -25,12 +25,14 @@ public class TeamRepository implements PanacheRepository<TeamDO> {
         return find("name = ?1 and countryDO.code = ?2", name, countryCode).firstResultOptional();
     }
 
-    public List<TeamDO> findByCountryCode(String countryCode) {
-        return find("countryDO.code = ?1", Sort.by("name"), countryCode).list();
-    }
-
     public List<TeamDO> findByName(String name) {
         return find("name", name).list();
+    }
+
+    public List<TeamDO> findByCountryCode(String countryCode, int pageIndex, int pageSize) {
+        return find("countryDO.code = ?1", Sort.by("name"), countryCode)
+                .page(pageIndex, pageSize)
+                .list();
     }
 
 }
