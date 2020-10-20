@@ -14,23 +14,23 @@ public class TeamRepository implements PanacheRepository<TeamDO> {
 
     Random random = new Random();
 
-    public Optional<TeamDO> findRandom() {
+    public Optional<TeamDO> findRandomAndDeletedIsFalse() {
         long countTeams = count();
         int randomVillain = random.nextInt((int) countTeams);
 
-        return findAll().page(randomVillain, 1).firstResultOptional();
+        return findAll().filter("deleted = false").page(randomVillain, 1).firstResultOptional();
     }
 
-    public Optional<TeamDO> findByNameAndByCountryCode(String name, String countryCode) {
-        return find("name = ?1 and countryDO.code = ?2", name, countryCode).firstResultOptional();
+    public Optional<TeamDO> findByIdAndDeletedIsFalse(Long id){
+        return find("id = ?1 and deleted = false", id).firstResultOptional();
     }
 
-    public List<TeamDO> findByName(String name) {
-        return find("name", name).list();
+    public List<TeamDO> findByNameAndDeletedIsFalse(String name) {
+        return find("name = ?1 and deleted = false", name).list();
     }
 
-    public List<TeamDO> findByCountryCode(String countryCode, int pageIndex, int pageSize) {
-        return find("countryDO.code = ?1", Sort.by("name"), countryCode)
+    public List<TeamDO> findByCountryCodeAndDeletedIsFalse(String countryCode, int pageIndex, int pageSize) {
+        return find("countryDO.code = ?1 and deleted = false", Sort.by("name"), countryCode)
                 .page(pageIndex, pageSize)
                 .list();
     }

@@ -55,6 +55,9 @@ public class TeamDO {
     @NotBlank(message = Validation.TEAM_PICTURE_BLANK)
     private String picture;
 
+    @Column(nullable = false)
+    private Boolean deleted = false;
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @NotNull(message = Validation.TEAM_COUNTRY_NULL)
     @JoinColumn(name = "country", nullable = false)
