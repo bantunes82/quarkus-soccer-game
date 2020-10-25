@@ -5,12 +5,10 @@ import quarkus.soccer.game.team.dataaccessobject.TeamRepository;
 import quarkus.soccer.game.team.domainobject.CountryDO;
 import quarkus.soccer.game.team.domainobject.TeamDO;
 import quarkus.soccer.game.team.exception.EntityNotFoundException;
-import quarkus.soccer.game.team.util.Range;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +38,7 @@ public class TeamService {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public TeamDO create(@Valid TeamDO team) {
+    public TeamDO create(TeamDO team) {
         Optional<CountryDO> countryDO = countryRepository.findByCountryCode(team.getCountryDO().getCode());
         countryDO.ifPresent(team::setCountryDO);
         teamRepository.persist(team);
@@ -49,7 +47,7 @@ public class TeamService {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public TeamDO update(Long teamId, @Valid TeamDO team) throws EntityNotFoundException {
+    public TeamDO update(Long teamId, TeamDO team) throws EntityNotFoundException {
         TeamDO teamSaved = findTeamChecked(teamId);
 
         team.setId(teamSaved.getId());
@@ -58,9 +56,9 @@ public class TeamService {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public TeamDO updateLevel(Long teamId,@Valid @Range(min = 1.0, max = 10.0)Double level) throws EntityNotFoundException {
+    public TeamDO updateLevel(Long teamId, Double level) throws EntityNotFoundException {
         TeamDO teamSaved = findTeamChecked(teamId);
-        final Double newLevel = Double.sum(teamSaved.getLevel(),level)/2;
+        final Double newLevel = Double.sum(teamSaved.getLevel(), level) / 2;
 
         teamSaved.setLevel(newLevel);
 
@@ -75,7 +73,7 @@ public class TeamService {
 
 
     private TeamDO findTeamChecked(Long teamId) throws EntityNotFoundException {
-        return teamRepository.findByIdOptional(teamId).orElseThrow(() -> new EntityNotFoundException("Could not find team with id: " + teamId));
+        return teamRepository.findByIdAndDeletedIsFalse(teamId).orElseThrow(() -> new EntityNotFoundException("Could not find team with id: " + teamId));
     }
 
 
