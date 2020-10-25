@@ -111,7 +111,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void create_GivenValidDO_ReturnsEntity() {
+    void create_ReturnsEntity() {
         when(countryRepository.findByCountryCode("BR")).thenReturn(Optional.of(country1));
         doNothing().when(teamRepository).persist(team1);
 
@@ -139,7 +139,7 @@ class TeamServiceTest {
         when(teamRepository.findByIdAndDeletedIsFalse(1L)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            TeamDO updateTeam = teamService.update(1L, team1);
+            teamService.update(1L, team1);
         }, "Could not find team with id: 1");
     }
 
