@@ -1,6 +1,6 @@
 package quarkus.soccer.game.team.handler;
 
-import org.jboss.logging.Logger;
+import lombok.extern.jbosslog.JBossLog;
 import quarkus.soccer.game.team.datatransferobject.ErrorDTO;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -14,16 +14,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@JBossLog
 @Provider
 @ApplicationScoped
 public class ConstraintViolationExceptionHandler
         implements ExceptionMapper<ConstraintViolationException> {
 
-    private static final Logger LOGGER = Logger.getLogger(ConstraintViolationExceptionHandler.class);
-
     @Override
     public Response toResponse(ConstraintViolationException exception) {
-        LOGGER.warnf("Errors while beans validation: %s", exception.getMessage());
+        log.debugf("Errors while beans validation: %s", exception.getMessage());
 
         Map<String, String> errors = exception.getConstraintViolations()
                 .stream()

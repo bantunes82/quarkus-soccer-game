@@ -1,6 +1,6 @@
 package quarkus.soccer.game.team.controller;
 
-import org.jboss.logging.Logger;
+import lombok.extern.jbosslog.JBossLog;
 import quarkus.soccer.game.team.domainobject.TeamDO;
 import quarkus.soccer.game.team.exception.EntityNotFoundException;
 import quarkus.soccer.game.team.service.TeamService;
@@ -23,11 +23,11 @@ import java.util.List;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+@JBossLog
 @Path("/v1/teams")
 @Produces(APPLICATION_JSON)
 public class TeamController {
 
-    private static final Logger LOGGER = Logger.getLogger(TeamController.class);
     private TeamService teamService;
 
     @Inject
@@ -65,7 +65,7 @@ public class TeamController {
         TeamDO teamSaved = teamService.create(teamDO);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(Long.toString(teamSaved.getId()));
 
-        LOGGER.debug("New team created with URI " + builder.build().toString());
+        log.debugf("New team created with URI %s", builder.build().toString());
 
         return Response.created(builder.build()).build();
     }

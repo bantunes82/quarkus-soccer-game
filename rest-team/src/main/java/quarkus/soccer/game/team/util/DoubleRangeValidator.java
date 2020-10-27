@@ -1,13 +1,12 @@
 package quarkus.soccer.game.team.util;
 
-import org.jboss.logging.Logger;
+import lombok.extern.jbosslog.JBossLog;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+@JBossLog
 public class DoubleRangeValidator implements ConstraintValidator<Range, Object> {
-
-    private static final Logger LOGGER = Logger.getLogger(DoubleRangeValidator.class);
 
     private Double maxPrecision;
     private Double minPrecision;
@@ -29,7 +28,7 @@ public class DoubleRangeValidator implements ConstraintValidator<Range, Object> 
             isValid = value.compareTo(maxPrecision) <= 0 && value.compareTo(minPrecision) >= 0;
 
             if (!isValid) {
-                LOGGER.warnf("Range is invalid: %s", value);
+                log.debugf("Range is invalid: %s", value);
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(message)
                         .addConstraintViolation();
