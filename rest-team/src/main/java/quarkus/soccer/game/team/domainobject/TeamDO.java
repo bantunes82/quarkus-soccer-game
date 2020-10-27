@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -45,8 +46,8 @@ public class TeamDO {
     @Column(name = "nick_name")
     private String nickName;
 
-    @NotBlank(message = Validation.TEAM_FOUNDED_BLANK)
     @Past(message = Validation.TEAM_FOUNDED_PAST)
+    @NotNull(message = Validation.TEAM_FOUNDED_BLANK)
     private LocalDate founded;
 
     @Range(min = 1.0, max = 10.0)
@@ -61,6 +62,7 @@ public class TeamDO {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @NotNull(message = Validation.TEAM_COUNTRY_NULL)
     @JoinColumn(name = "country", nullable = false)
+    @Valid
     private CountryDO countryDO;
 
     @Override

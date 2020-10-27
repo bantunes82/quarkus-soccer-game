@@ -16,12 +16,14 @@ public class TeamRepository implements PanacheRepository<TeamDO> {
 
     public Optional<TeamDO> findRandomAndDeletedIsFalse() {
         long countTeams = count();
-        int randomVillain = random.nextInt((int) countTeams);
+        int randomVillain = count() == 0 ? 1 : random.nextInt((int) countTeams);
 
-        return findAll().filter("deleted = false").page(randomVillain, 1).firstResultOptional();
+        return find("deleted = false")
+                .page(randomVillain, 1)
+                .firstResultOptional();
     }
 
-    public Optional<TeamDO> findByIdAndDeletedIsFalse(Long id){
+    public Optional<TeamDO> findByIdAndDeletedIsFalse(Long id) {
         return find("id = ?1 and deleted = false", id).firstResultOptional();
     }
 
