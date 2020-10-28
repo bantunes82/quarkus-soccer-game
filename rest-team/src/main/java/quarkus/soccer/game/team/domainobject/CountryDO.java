@@ -15,7 +15,6 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "country", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_country_name", columnNames = {"name"}),
         @UniqueConstraint(name = "uc_country_code", columnNames = {"code"})
 })
 @Data

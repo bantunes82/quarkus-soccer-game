@@ -51,10 +51,22 @@ public class TeamService {
     @Transactional(Transactional.TxType.REQUIRED)
     public TeamDO update(Long teamId, @Valid TeamDO team) throws EntityNotFoundException {
         TeamDO teamSaved = findTeamChecked(teamId);
+        Optional<CountryDO> countrySaved = countryRepository.findByCountryCode(team.getCountryDO().getCode());
 
-        team.setId(teamSaved.getId());
+        updateTeam(team, teamSaved, countrySaved);
 
-        return create(team);
+        return teamSaved;
+    }
+
+    private void updateTeam(TeamDO team, TeamDO teamSaved, Optional<CountryDO> countrySaved) {
+        teamSaved.setNickName(team.getNickName());
+        teamSaved.setLevel(team.getLevel());
+        teamSaved.setName(team.getName());
+        teamSaved.setFounded(team.getFounded());
+        teamSaved.setPicture(team.getPicture());
+
+        CountryDO countryDO = countrySaved.orElse(team.getCountryDO());
+        teamSaved.setCountryDO(countryDO);
     }
 
     @Transactional(Transactional.TxType.REQUIRED)

@@ -11,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -53,7 +54,7 @@ public class TeamController {
 
     @GET
     @Path("/country/{countryCode}")
-    public Response findTeamByCountryCode(@PathParam("countryCode") String countryCode, @QueryParam("pageIndex") @DefaultValue("1") int pageIndex, @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+    public Response findTeamByCountryCode(@PathParam("countryCode") String countryCode, @QueryParam("pageIndex") int pageIndex, @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         List<TeamDO> teams = teamService.findByCountryCode(countryCode, pageIndex, pageSize);
 
         return Response.ok(teams).build();
@@ -68,5 +69,14 @@ public class TeamController {
         log.debugf("New team created with URI %s", builder.build().toString());
 
         return Response.created(builder.build()).build();
+    }
+
+    @PUT
+    @Consumes(APPLICATION_JSON)
+    @Path("/{id}")
+    public Response updateTeam(@PathParam("id") Long teamId, @Valid TeamDO team) throws EntityNotFoundException {
+        TeamDO teamUpdated = teamService.update(teamId, team);
+
+        return Response.ok(teamUpdated).build();
     }
 }
