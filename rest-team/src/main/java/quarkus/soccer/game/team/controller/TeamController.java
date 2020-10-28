@@ -4,12 +4,15 @@ import lombok.extern.jbosslog.JBossLog;
 import quarkus.soccer.game.team.domainobject.TeamDO;
 import quarkus.soccer.game.team.exception.EntityNotFoundException;
 import quarkus.soccer.game.team.service.TeamService;
+import quarkus.soccer.game.team.util.Range;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -78,5 +81,21 @@ public class TeamController {
         TeamDO teamUpdated = teamService.update(teamId, team);
 
         return Response.ok(teamUpdated).build();
+    }
+
+    @PATCH
+    @Path("/{id}/level/{value}")
+    public Response updateTeamLevel(@PathParam("id") Long teamId, @Range(min = 1.0, max = 10.0) @PathParam("value") Double level) throws EntityNotFoundException {
+        TeamDO teamUpdated = teamService.updateLevel(teamId, level);
+
+        return Response.ok(teamUpdated).build();
+    }
+
+    @DELETE
+    @Path("{id}")
+    public Response deleteTeam(@PathParam("id") Long teamId) throws EntityNotFoundException {
+        teamService.delete(teamId);
+
+        return Response.noContent().build();
     }
 }

@@ -70,7 +70,7 @@ public class TeamService {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public TeamDO updateLevel(Long teamId, @Valid @Range(min = 1.0, max = 10.0) Double level) throws EntityNotFoundException {
+    public TeamDO updateLevel(Long teamId, @Range(min = 1.0, max = 10.0) Double level) throws EntityNotFoundException {
         TeamDO teamSaved = findTeamChecked(teamId);
         final Double newLevel = Double.sum(teamSaved.getLevel(), level) / 2;
 
