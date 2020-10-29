@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import quarkus.soccer.game.team.constants.Validation;
+import quarkus.soccer.game.team.util.CountryCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -17,8 +18,7 @@ public class CountryDTO {
     @Size(min = 3, max = 20, message = Validation.COUNTRY_NAME_SIZE)
     private String name;
 
-    @NotBlank(message = Validation.COUNTRY_CODE_BLANK)
-    @Size(min = 2, max = 2, message = Validation.COUNTRY_CODE_SIZE)
+    @CountryCode
     private String code;
 
 }

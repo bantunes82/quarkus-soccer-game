@@ -6,6 +6,7 @@ import quarkus.soccer.game.team.datatransferobject.TeamDTO;
 import quarkus.soccer.game.team.domainobject.TeamDO;
 import quarkus.soccer.game.team.exception.EntityNotFoundException;
 import quarkus.soccer.game.team.service.TeamService;
+import quarkus.soccer.game.team.util.CountryCode;
 import quarkus.soccer.game.team.util.Range;
 
 import javax.inject.Inject;
@@ -25,7 +26,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.StreamSupport;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -61,7 +65,7 @@ public class TeamController {
 
     @GET
     @Path("/country/{countryCode}")
-    public Response findTeamByCountryCode(@PathParam("countryCode") String countryCode, @QueryParam("pageIndex") int pageIndex, @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+    public Response findTeamByCountryCode(@PathParam("countryCode") @CountryCode String countryCode, @QueryParam("pageIndex") int pageIndex, @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         List<TeamDO> teams = teamService.findByCountryCode(countryCode, pageIndex, pageSize);
 
         return Response.ok(teamMapper.toTeamDTOList(teams)).build();

@@ -10,7 +10,6 @@ public class Validation {
     public static final String TEAM_COUNTRY_NULL = "{constraint.team.countryNotNull}";
 
     public static final String COUNTRY_NAME_BLANK = "{constraint.country.nameNotBlank}";
-    public static final String COUNTRY_CODE_BLANK =  "{constraint.country.codeNotBlank}";
     public static final String COUNTRY_NAME_SIZE =  "{constraint.country.nameSize}";
     public static final String COUNTRY_CODE_SIZE = "{constraint.country.codeSize}";
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import quarkus.soccer.game.team.constants.Validation;
+import quarkus.soccer.game.team.util.CountryCode;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,8 +31,7 @@ public class CountryDO {
     @Size(min = 3, max = 20, message = Validation.COUNTRY_NAME_SIZE)
     private String name;
 
-    @NotBlank(message = Validation.COUNTRY_CODE_BLANK)
-    @Size(min = 2, max = 2, message = Validation.COUNTRY_CODE_SIZE)
+    @CountryCode
     private String code;
 
 
