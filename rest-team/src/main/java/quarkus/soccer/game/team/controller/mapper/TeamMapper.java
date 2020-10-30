@@ -1,6 +1,7 @@
 package quarkus.soccer.game.team.controller.mapper;
 
 import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import quarkus.soccer.game.team.datatransferobject.TeamDTO;
@@ -8,7 +9,7 @@ import quarkus.soccer.game.team.domainobject.TeamDO;
 
 import java.util.List;
 
-@Mapper(config = QuarkusMappingConfig.class, uses = {CountryMapper.class})
+@Mapper(config = QuarkusMappingConfig.class, uses = {CountryMapper.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface TeamMapper {
 
     @Mapping(source = "countryDTO", target = "countryDO")
