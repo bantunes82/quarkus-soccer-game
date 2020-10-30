@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import quarkus.soccer.game.team.dataaccessobject.CountryRepository;
@@ -31,6 +32,7 @@ class TeamServiceTest {
     @Mock
     private CountryRepository countryRepository;
 
+    @InjectMocks
     private TeamService teamService;
 
     private TeamDO team1;
@@ -39,7 +41,6 @@ class TeamServiceTest {
     @BeforeEach
     void setUp() {
         country1 = new CountryDO(1l, "Brasil", "BR");
-        teamService = new TeamService(teamRepository, countryRepository);
 
         team1 = TeamDO.builder()
                 .id(1L)
@@ -54,7 +55,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void findRandom_ReturnTeam() throws EntityNotFoundException {
+    void findRandom_ReturnsTeam() throws EntityNotFoundException {
         when(teamRepository.findRandomAndDeletedIsFalse()).thenReturn(Optional.of(team1));
 
         TeamDO teamDO = teamService.findRandom();
