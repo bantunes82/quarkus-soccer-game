@@ -81,7 +81,7 @@ class TeamControllerTest {
     }
 
     @Test
-    void findRandomTeam__GivenThereIsNoTeam_ThrowsEntityNotFoundException() throws EntityNotFoundException {
+    void findRandomTeam_GivenThereIsNoTeam_ThrowsEntityNotFoundException() throws EntityNotFoundException {
         when(teamService.findRandom()).thenThrow(new EntityNotFoundException("Could not find any team"));
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> teamController.findRandomTeam(), "Could not find any team");

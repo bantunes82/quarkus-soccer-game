@@ -37,7 +37,7 @@ public class TeamDO {
     private Long id;
 
     @NotBlank(message = Validation.TEAM_NAME_BLANK)
-    @Size(min = 3, max = 30, message = Validation.TEAM_NAME_SIZE)
+    @Size(min = 3, max = 50, message = Validation.TEAM_NAME_SIZE)
     private String name;
 
     @Column(name = "nick_name")

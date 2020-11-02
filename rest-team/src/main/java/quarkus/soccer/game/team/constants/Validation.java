@@ -11,5 +11,5 @@ public class Validation {
 
     public static final String COUNTRY_NAME_BLANK = "{constraint.country.nameNotBlank}";
     public static final String COUNTRY_NAME_SIZE =  "{constraint.country.nameSize}";
-    public static final String COUNTRY_CODE_SIZE = "{constraint.country.codeSize}";
+    public static final String COUNTRY_CODE_INVALID = "{constraint.country.codeInvalid}";
 }

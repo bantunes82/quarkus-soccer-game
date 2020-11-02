@@ -20,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface CountryCode {
 
-    String message() default Validation.COUNTRY_CODE_SIZE;
+    String message() default Validation.COUNTRY_CODE_INVALID;
 
     Class<?>[] groups() default { };
 
