@@ -1,12 +1,15 @@
 package quarkus.soccer.game.team.controller;
 
-import io.quarkus.test.TestTransaction;
 import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import quarkus.soccer.game.team.container.DatabaseResource;
 import quarkus.soccer.game.team.datatransferobject.ErrorDTO;
 import quarkus.soccer.game.team.datatransferobject.TeamDTO;
@@ -24,19 +27,20 @@ import static javax.ws.rs.core.Response.Status.OK;
 
 @QuarkusTest
 @QuarkusTestResource(DatabaseResource.class)
-@TestTransaction
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TeamControllerIntegrationTest {
 
     private String TEAM_PATH = "/v1/teams";
-
+    private String TEAM_NAME = "Sport Club Corinthians Paulista";
 
     @BeforeEach
     void setUp() {
     }
 
     @Test
+    @Order(2073741823)
     void findRandomTeam_GivenThereIsNoTeam_ReturnsNotFound() {
-        given().delete(TEAM_PATH + "/1").then().statusCode(NO_CONTENT.getStatusCode());
+       given().delete(TEAM_PATH + "/1").then().statusCode(NO_CONTENT.getStatusCode());
 
         ErrorDTO response = given()
                 .when()
@@ -61,7 +65,7 @@ class TeamControllerIntegrationTest {
                 .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .extract().body().as(TeamDTO.class);
 
-        Assertions.assertEquals("Sport Club Corinthians Paulista", response.getName());
+        Assertions.assertEquals(TEAM_NAME, response.getName());
 
     }
 
@@ -89,7 +93,7 @@ class TeamControllerIntegrationTest {
                 .extract().body().as(getTeamDTOTypeRef());
 
         Assertions.assertEquals(1, response.size());
-        Assertions.assertEquals("Sport Club Corinthians Paulista", response.get(0).getName());
+        Assertions.assertEquals(TEAM_NAME, response.get(0).getName());
     }
 
     @Test
@@ -147,7 +151,7 @@ class TeamControllerIntegrationTest {
                 .extract().body().as(getTeamDTOTypeRef());
 
         Assertions.assertEquals(1, response.size());
-        Assertions.assertEquals("Sport Club Corinthians Paulista", response.get(0).getName());
+        Assertions.assertEquals(TEAM_NAME, response.get(0).getName());
     }
 
     @Test
