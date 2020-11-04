@@ -26,17 +26,10 @@ public class ConstraintViolationExceptionHandler
 
         Map<String, String> errors = exception.getConstraintViolations()
                 .stream()
-                .collect(Collectors.toMap(constraintViolation -> lastFieldName(constraintViolation.getPropertyPath().iterator()), ConstraintViolation::getMessage));
+                .collect(Collectors.toMap(constraintViolation -> constraintViolation.getPropertyPath().toString(), ConstraintViolation::getMessage, (existing, replacement) -> existing));
 
         ErrorDTO errorDTO = new ErrorDTO(errors);
         return Response.status(Response.Status.BAD_REQUEST).entity(errorDTO).build();
     }
 
-    private String lastFieldName(Iterator<Path.Node> nodes) {
-        Path.Node last = null;
-        while (nodes.hasNext()) {
-            last = nodes.next();
-        }
-        return last.getName();
-    }
 }
