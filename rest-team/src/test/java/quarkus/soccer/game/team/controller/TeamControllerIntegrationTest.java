@@ -31,6 +31,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 @QuarkusTest
 @QuarkusTestResource(DatabaseResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Tag("integration")
 class TeamControllerIntegrationTest {
 
     private String TEAM_PATH = "/v1/teams";
