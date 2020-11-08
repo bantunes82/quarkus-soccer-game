@@ -74,6 +74,13 @@ class TeamMapperTest {
     }
 
     @Test
+    void toTeamDO_GivenNullValue_ReturnsNullValue() {
+        TeamDO result = teamMapper.toTeamDO(null);
+
+        Assertions.assertNull(result);
+    }
+
+    @Test
     void toTeamDTO_ReturnsTeamDTO() {
         when(countryMapper.toCountryDTO(countryDO)).thenReturn(countryDTO);
 
@@ -86,6 +93,13 @@ class TeamMapperTest {
         Assertions.assertEquals(teamDO.getFounded(), result.getFounded());
         Assertions.assertEquals(teamDO.getCountryDO().getCode(), result.getCountryDTO().getCode());
         Assertions.assertEquals(teamDO.getCountryDO().getName(), result.getCountryDTO().getName());
+    }
+
+    @Test
+    void toTeamDTO_GivenNullValue_ReturnsNullValue() {
+        TeamDTO result = teamMapper.toTeamDTO(null);
+
+        Assertions.assertNull(result);
     }
 
     @Test
@@ -103,5 +117,12 @@ class TeamMapperTest {
         Assertions.assertEquals(teamDO.getFounded(), result.getFounded());
         Assertions.assertEquals(teamDO.getCountryDO().getCode(), result.getCountryDTO().getCode());
         Assertions.assertEquals(teamDO.getCountryDO().getName(), result.getCountryDTO().getName());
+    }
+
+    @Test
+    void toTeamDTOList_GivenNullValue_ReturnsNullValue() {
+        List<TeamDTO> results = teamMapper.toTeamDTOList(null);
+
+        Assertions.assertNull(results);
     }
 }

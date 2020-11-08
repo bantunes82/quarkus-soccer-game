@@ -29,10 +29,24 @@ class CountryMapperTest {
     }
 
     @Test
+    void toCountryDO_GivenNullValue_ReturnsNullValue() {
+        CountryDO result = countryMapper.toCountryDO(null);
+
+        Assertions.assertNull(result);
+    }
+
+    @Test
     void toCountryDTO_ReturnsCountryDTO() {
         CountryDTO result = countryMapper.toCountryDTO(countryDO);
 
         Assertions.assertEquals(countryDO.getName(), result.getName());
         Assertions.assertEquals(countryDO.getCode(), result.getCode());
+    }
+
+    @Test
+    void toCountryDTO_GivenNullValue_ReturnsNullValue() {
+        CountryDTO result = countryMapper.toCountryDTO(null);
+
+        Assertions.assertNull(result);
     }
 }
