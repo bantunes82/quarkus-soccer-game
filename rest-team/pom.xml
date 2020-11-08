@@ -174,7 +174,7 @@
                             <goal>test</goal>
                         </goals>
                         <configuration>
-                            <excludedGroups>!integration</excludedGroups>
+                            <excludedGroups>!integration,native</excludedGroups>
                             <groups>integration</groups>
                             <systemPropertyVariables>
                                 <jacoco-agent.destfile>${project.build.directory}/jacoco-it.exec</jacoco-agent.destfile>
