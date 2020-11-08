@@ -36,7 +36,7 @@ class TeamDOTest {
 
 
     @Test
-    public void boilerplate() {
+    void boilerplate() {
         final Class<?> teamDO = TeamDO.class;
 
         assertPojoMethodsFor(teamDO)
@@ -45,33 +45,33 @@ class TeamDOTest {
     }
 
     @Test
-    public void equals_Custom() {
+    void equals_Custom() {
         assertEquals(team1, team2);
     }
 
 
     @Test
-    public void equals_CustomWithIdDifferent() {
+    void equals_CustomWithIdDifferent() {
         team2.setId(2L);
         assertNotEquals(team1, team2);
     }
 
 
     @Test
-    public void equals_CustomWithNameDifferent() {
+    void equals_CustomWithNameDifferent() {
         team2.setName("Cruzeiro");
         assertNotEquals(team1, team2);
     }
 
 
     @Test
-    public void equals_CustomWithCountryDifferent() {
+    void equals_CustomWithCountryDifferent() {
         team2.setCountryDO(new CountryDO(2l,"Argentina", "AR"));
         assertNotEquals(team1, team2);
     }
 
     @Test
-    public void equals_CustomDifferentObjects() {
+    void equals_CustomDifferentObjects() {
         assertNotEquals(team1, new Object());
     }
 }

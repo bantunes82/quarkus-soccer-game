@@ -8,7 +8,7 @@ import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 class CountryDTOTest {
 
     @Test
-    public void boilerplate() {
+    void boilerplate() {
         final Class<?> countryDTO = CountryDTO.class;
 
         assertPojoMethodsFor(countryDTO)

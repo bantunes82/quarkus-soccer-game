@@ -6,11 +6,9 @@ import quarkus.soccer.game.team.datatransferobject.ErrorDTO;
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
 

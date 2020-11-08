@@ -5,6 +5,7 @@ import io.quarkus.panache.common.Sort;
 import quarkus.soccer.game.team.domainobject.TeamDO;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -12,7 +13,7 @@ import java.util.Random;
 @ApplicationScoped
 public class TeamRepository implements PanacheRepository<TeamDO> {
 
-    Random random = new Random();
+    Random random = new SecureRandom();
 
     public Optional<TeamDO> findRandomAndDeletedIsFalse() {
         long countTeams = count();

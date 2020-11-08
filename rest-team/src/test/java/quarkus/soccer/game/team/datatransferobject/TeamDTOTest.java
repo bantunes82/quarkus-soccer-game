@@ -8,7 +8,7 @@ import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 class TeamDTOTest {
 
     @Test
-    public void boilerplate() {
+    void boilerplate() {
         final Class<?> teamDTO = TeamDTO.class;
 
         assertPojoMethodsFor(teamDTO)

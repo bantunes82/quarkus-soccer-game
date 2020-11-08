@@ -1,7 +1,11 @@
 package quarkus.soccer.game.team.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Validation {
-    public static final String TEAM_NAME_BLANK = "{constraint.team.nameNotBlank}";;
+    public static final String TEAM_NAME_BLANK = "{constraint.team.nameNotBlank}";
     public static final String TEAM_NAME_SIZE =  "{constraint.team.nameSize}";
     public static final String TEAM_FOUNDED_BLANK = "{constraint.team.foundedNotBlank}";
     public static final String TEAM_FOUNDED_PAST = "{constraint.team.foundedPast}";

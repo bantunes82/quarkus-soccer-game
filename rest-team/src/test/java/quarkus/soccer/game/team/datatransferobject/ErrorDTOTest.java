@@ -8,7 +8,7 @@ import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 class ErrorDTOTest {
 
     @Test
-    public void boilerplate() {
+    void boilerplate() {
         final Class<?> errorDTO = ErrorDTO.class;
 
         assertPojoMethodsFor(errorDTO)
