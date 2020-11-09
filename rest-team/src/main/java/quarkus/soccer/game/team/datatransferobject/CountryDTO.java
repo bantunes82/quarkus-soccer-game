@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import quarkus.soccer.game.team.constants.Validation;
 import quarkus.soccer.game.team.util.CountryCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+@Schema(description="Country",required = true)
 @Getter
 @Setter
 @NoArgsConstructor

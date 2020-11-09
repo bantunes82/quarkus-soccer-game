@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import quarkus.soccer.game.team.constants.Validation;
 import quarkus.soccer.game.team.util.Range;
 
@@ -15,6 +16,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
+@Schema(description="Team Soccer", required = true)
 @Builder
 @Getter
 @Setter
