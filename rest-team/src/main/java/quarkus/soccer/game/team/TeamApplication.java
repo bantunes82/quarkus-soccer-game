@@ -23,7 +23,7 @@ import javax.ws.rs.core.Application;
                         name = "Bruno Romao Antunes",
                         url = "https://github.com/bantunes82",
                         email = "bantunes82@gmail.com")),
-        servers = {@Server(url = "http://localhost:8081")},
+        servers = {@Server(url = "http://localhost:8081"),@Server(url = "http://localhost:8081/rest-team")},
         externalDocs = @ExternalDocumentation(url = "https://github.com/bantunes82/quarkus-soccer-game/tree/main/rest-team")
 )
 public class TeamApplication extends Application {
