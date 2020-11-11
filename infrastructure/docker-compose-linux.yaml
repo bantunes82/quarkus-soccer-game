@@ -1,9 +1,18 @@
 version: "3"
 services:
-    database:
-        image: "postgres:10.5"
-        container_name: "soccer-database"
-        ports:
-            - "5432:5432"
-        volumes:
-            - ./db-init/initialize-databases.sql:/docker-entrypoint-initdb.d/init.sql
+  database:
+    image: "postgres:10.5"
+    container_name: "soccer-database"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db-init/initialize-databases.sql:/docker-entrypoint-initdb.d/init.sql
+
+  monitoring:
+    image: "prom/prometheus"
+    network_mode: 'host' # On Linux, this is required to let Prometheus access the other containers.
+    container_name: "super-visor"
+    ports:
+      - 9090:9090
+    volumes:
+      - ./monitoring/prometheus-linux.yml:/etc/prometheus/prometheus.yml
