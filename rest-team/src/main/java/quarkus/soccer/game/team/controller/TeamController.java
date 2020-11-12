@@ -59,8 +59,8 @@ public class TeamController {
     @Operation(summary = "Returns a random soccer team")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "When there is at least one soccer team available")
     @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find any team\"}}")), description = "When there is no soccer team available")
-    @Counted(name = "countFindRandomTeam", description = "Counts how many times the findRandomTeam method has been invoked")
-    @Timed(name = "timeFindRandomTeam", description = "Times how long it takes to invoke the findRandomTeam method", unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "countFindRandomTeam", description = "Counts how many times the findRandomTeam method has been invoked", displayName = "Count Find Random Team")
+    @Timed(name = "timeFindRandomTeam", description = "Times how long it takes to invoke the findRandomTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Find Random Team")
     @GET
     @Path("/random")
     public Response findRandomTeam() throws EntityNotFoundException {
@@ -71,8 +71,8 @@ public class TeamController {
 
     @Operation(summary = "Returns a list of soccer teams that has the specified name")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO[].class, required = true)), description = "Returns a list of soccer teams for the specified name")
-    @Counted(name = "countFindTeamByName", description = "Counts how many times the findTeamByName method has been invoked")
-    @Timed(name = "timeFindTeamByName", description = "Times how long it takes to invoke the findTeamByName method", unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "countFindTeamByName", description = "Counts how many times the findTeamByName method has been invoked", displayName = "Count Find Team by Name")
+    @Timed(name = "timeFindTeamByName", description = "Times how long it takes to invoke the findTeamByName method", unit = MetricUnits.MILLISECONDS, displayName = "Time Find Team by Name")
     @GET
     @Path("/name/{name}")
     public Response findTeamByName(@Parameter(description = "soccer team name", required = true) @PathParam("name") String name) {
@@ -83,8 +83,8 @@ public class TeamController {
 
     @Operation(summary = "Returns all the soccer teams for the specified Country Code")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO[].class, required = true)), description = "Returns a list the soccer teams for the specified Country Code")
-    @Counted(name = "countFindTeamByCountryCode", description = "Counts how many times the findTeamByCountryCode method has been invoked")
-    @Timed(name = "timeFindTeamByCountryCode", description = "Times how long it takes to invoke the findTeamByCountryCode method", unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "countFindTeamByCountryCode", description = "Counts how many times the findTeamByCountryCode method has been invoked", displayName = "Count Find Team by Country Code")
+    @Timed(name = "timeFindTeamByCountryCode", description = "Times how long it takes to invoke the findTeamByCountryCode method", unit = MetricUnits.MILLISECONDS, displayName = "Time Find Team by Country Code")
     @GET
     @Path("/country/{countryCode}")
     public Response findTeamByCountryCode(@Parameter(description = "country code", required = true) @PathParam("countryCode") @CountryCode String countryCode,
@@ -97,8 +97,8 @@ public class TeamController {
 
     @Operation(summary = "Create a soccer team")
     @APIResponse(responseCode = "201", description = "The URI of the created soccer team", headers = {@Header(description = "URI location of the created soccer team", schema = @Schema(implementation = URI.class))})
-    @Counted(name = "countCreateTeam", description = "Counts how many times the createTeam method has been invoked")
-    @Timed(name = "timeCreateTeam", description = "Times how long it takes to invoke the createTeam method", unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "countCreateTeam", description = "Counts how many times the createTeam method has been invoked", displayName = "Count Create Team")
+    @Timed(name = "timeCreateTeam", description = "Times how long it takes to invoke the createTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Create Team")
     @POST
     @Consumes(APPLICATION_JSON)
     public Response createTeam(@RequestBody(required = true, content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class)), description = "soccer team to be created") @Valid TeamDTO teamDTO, @Context UriInfo uriInfo) {
@@ -114,8 +114,8 @@ public class TeamController {
     @Operation(summary = "Update a soccer team for the specified team id")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "Returns the soccer team updated")
     @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
-    @Counted(name = "countUpdateTeam", description = "Counts how many times the updateTeam method has been invoked")
-    @Timed(name = "timeUpdateTeam", description = "Times how long it takes to invoke the updateTeam method", unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "countUpdateTeam", description = "Counts how many times the updateTeam method has been invoked", displayName = "Count Update Team")
+    @Timed(name = "timeUpdateTeam", description = "Times how long it takes to invoke the updateTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Update Team")
     @PUT
     @Consumes(APPLICATION_JSON)
     @Path("/{id}")
@@ -130,8 +130,8 @@ public class TeamController {
     @Operation(summary = "Update the soccer team level for the specified team id")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "Returns the soccer team with the updated level")
     @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
-    @Counted(name = "countUpdateTeamLevel", description = "Counts how many times the updateTeamLevel method has been invoked")
-    @Timed(name = "timeUpdateTeamLevel", description = "Times how long it takes to invoke the updateTeamLevel method", unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "countUpdateTeamLevel", description = "Counts how many times the updateTeamLevel method has been invoked", displayName = "Count Update Team Level")
+    @Timed(name = "timeUpdateTeamLevel", description = "Times how long it takes to invoke the updateTeamLevel method", unit = MetricUnits.MILLISECONDS, displayName = "Time Update Team Level")
     @PATCH
     @Path("/{id}/level/{value}")
     public Response updateTeamLevel(@Parameter(required = true, description = "soccer team id") @PathParam("id") Long teamId,
@@ -144,8 +144,8 @@ public class TeamController {
     @Operation(summary = "Delete the soccer team for the specified team id")
     @APIResponse(responseCode = "204")
     @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
-    @Counted(name = "countDeleteTeam", description = "Counts how many times the deleteTeam method has been invoked")
-    @Timed(name = "timeDeleteTeam", description = "Times how long it takes to invoke the deleteTeam method", unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "countDeleteTeam", description = "Counts how many times the deleteTeam method has been invoked", displayName = "Count Delete Team")
+    @Timed(name = "timeDeleteTeam", description = "Times how long it takes to invoke the deleteTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Delete Team")
     @DELETE
     @Path("{id}")
     public Response deleteTeam(@Parameter(required = true, description = "soccer team id") @PathParam("id") Long teamId) throws EntityNotFoundException {
