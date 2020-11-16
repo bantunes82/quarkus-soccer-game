@@ -12,7 +12,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 @QuarkusTest
 @Tag("integration")
-public class MetricIntegrationTest {
+class MetricIntegrationTest {
 
     @Test
     void shouldPingMetrics() {

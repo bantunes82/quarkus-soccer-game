@@ -11,7 +11,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 @QuarkusTest
 @Tag("integration")
-public class HealthIntegrationTest {
+class HealthIntegrationTest {
 
 
     @Test

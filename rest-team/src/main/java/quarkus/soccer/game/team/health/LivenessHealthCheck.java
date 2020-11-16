@@ -12,16 +12,16 @@ import javax.enterprise.context.ApplicationScoped;
 public class LivenessHealthCheck implements HealthCheck {
 
     @ConfigProperty(name = "quarkus.log.level")
-    String QUARKUS_LOG_LEVEL;
+    String quarkusLogLevel;
 
     @ConfigProperty(name = "quarkus.log.category.\"quarkus.soccer.game.team\".level")
-    String APPLICATION_LOG_LEVEL;
+    String applicationLogLevel;
 
     @Override
     public HealthCheckResponse call() {
         return HealthCheckResponse.named("Ping Quarkus Soccer Team API")
-                .withData("Property: quarkus.log.level", QUARKUS_LOG_LEVEL)
-                .withData("Property: quarkus.log.category.quarkus.soccer.game.team.level", APPLICATION_LOG_LEVEL)
+                .withData("Property: quarkus.log.level", quarkusLogLevel)
+                .withData("Property: quarkus.log.category.quarkus.soccer.game.team.level", applicationLogLevel)
                 .up()
                 .build();
     }
