@@ -5,12 +5,16 @@ import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.headers.Header;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
+import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
 import quarkus.soccer.game.team.controller.mapper.TeamMapper;
 import quarkus.soccer.game.team.datatransferobject.ErrorDTO;
 import quarkus.soccer.game.team.datatransferobject.TeamDTO;
@@ -46,6 +50,12 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @JBossLog
 @Path("/v1/teams")
 @Produces(APPLICATION_JSON)
+@SecuritySchemes(value = {
+        @SecurityScheme(securitySchemeName = "accessToken",
+                type = SecuritySchemeType.HTTP,
+                description = "Access token for the user that belongs to TEAM role",
+                scheme = "Bearer")}
+)
 public class TeamController {
 
     private TeamService teamService;
@@ -98,6 +108,7 @@ public class TeamController {
 
     @Operation(summary = "Create a soccer team")
     @APIResponse(responseCode = "201", description = "The URI of the created soccer team", headers = {@Header(description = "URI location of the created soccer team", schema = @Schema(implementation = URI.class))})
+    @SecurityRequirement(name = "accessToken")
     @Counted(name = "countCreateTeam", description = "Counts how many times the createTeam method has been invoked", displayName = "Count Create Team")
     @Timed(name = "timeCreateTeam", description = "Times how long it takes to invoke the createTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Create Team")
     @RolesAllowed("team")
@@ -116,6 +127,7 @@ public class TeamController {
     @Operation(summary = "Update a soccer team for the specified team id")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "Returns the soccer team updated")
     @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
+    @SecurityRequirement(name = "accessToken")
     @Counted(name = "countUpdateTeam", description = "Counts how many times the updateTeam method has been invoked", displayName = "Count Update Team")
     @Timed(name = "timeUpdateTeam", description = "Times how long it takes to invoke the updateTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Update Team")
     @RolesAllowed("team")
@@ -133,6 +145,7 @@ public class TeamController {
     @Operation(summary = "Update the soccer team level for the specified team id")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "Returns the soccer team with the updated level")
     @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
+    @SecurityRequirement(name = "accessToken")
     @Counted(name = "countUpdateTeamLevel", description = "Counts how many times the updateTeamLevel method has been invoked", displayName = "Count Update Team Level")
     @Timed(name = "timeUpdateTeamLevel", description = "Times how long it takes to invoke the updateTeamLevel method", unit = MetricUnits.MILLISECONDS, displayName = "Time Update Team Level")
     @RolesAllowed("team")
@@ -148,6 +161,7 @@ public class TeamController {
     @Operation(summary = "Delete the soccer team for the specified team id")
     @APIResponse(responseCode = "204")
     @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
+    @SecurityRequirement(name = "accessToken")
     @Counted(name = "countDeleteTeam", description = "Counts how many times the deleteTeam method has been invoked", displayName = "Count Delete Team")
     @Timed(name = "timeDeleteTeam", description = "Times how long it takes to invoke the deleteTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Delete Team")
     @RolesAllowed("team")
