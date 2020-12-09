@@ -25,7 +25,7 @@ import java.time.LocalDate;
 public class TeamDTO {
 
     @NotBlank(message = Validation.TEAM_NAME_BLANK)
-    @Size(min = 3, max = 30, message = Validation.TEAM_NAME_SIZE)
+    @Size(min = 3, max = 50, message = Validation.TEAM_NAME_SIZE)
     private String name;
 
     private String nickName;

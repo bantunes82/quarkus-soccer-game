@@ -60,7 +60,7 @@ public class TeamService {
 
     private void updateTeam(TeamDO team, TeamDO teamSaved, Optional<CountryDO> countrySaved) {
         teamSaved.setNickName(team.getNickName());
-        teamSaved.setLevel(team.getLevel());
+        teamSaved.setLevel(generateNewLevel(team.getLevel(), teamSaved.getLevel()));
         teamSaved.setName(team.getName());
         teamSaved.setFounded(team.getFounded());
         teamSaved.setPicture(team.getPicture());
@@ -72,11 +72,13 @@ public class TeamService {
     @Transactional(Transactional.TxType.REQUIRED)
     public TeamDO updateLevel(Long teamId, @Range(min = 1.0, max = 10.0) Double level) throws EntityNotFoundException {
         TeamDO teamSaved = findTeamChecked(teamId);
-        final Double newLevel = Double.sum(teamSaved.getLevel(), level) / 2;
-
-        teamSaved.setLevel(newLevel);
+        teamSaved.setLevel(generateNewLevel(level, teamSaved.getLevel()));
 
         return teamSaved;
+    }
+
+    private Double generateNewLevel(Double newLevel, Double oldLevel) {
+        return Double.sum(newLevel, oldLevel) / 2;
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
