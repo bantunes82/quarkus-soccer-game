@@ -3,6 +3,7 @@ package quarkus.soccer.game.team.controller;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -12,15 +13,21 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import quarkus.soccer.game.team.container.DatabaseResource;
+import quarkus.soccer.game.team.container.IdentityAccessManagementResource;
 import quarkus.soccer.game.team.datatransferobject.CountryDTO;
 import quarkus.soccer.game.team.datatransferobject.ErrorDTO;
 import quarkus.soccer.game.team.datatransferobject.TeamDTO;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static javax.ws.rs.core.HttpHeaders.ACCEPT_LANGUAGE;
+import static javax.ws.rs.core.HttpHeaders.LOCATION;
+import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
+import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.CREATED;
@@ -30,6 +37,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 
 @QuarkusTest
 @QuarkusTestResource(DatabaseResource.class)
+@QuarkusTestResource(IdentityAccessManagementResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Tag("integration")
 class TeamControllerIntegrationTest {
@@ -47,6 +55,11 @@ class TeamControllerIntegrationTest {
     private TeamDTO invalidTeamDTO;
     private TeamDTO invalidTeamDTONullValues;
     private TeamDTO invalidTeamDTONullCountryDTO;
+
+    @ConfigProperty(name = "quarkus.oidc.auth-server-url")
+    private String authServerUrl;
+    @ConfigProperty(name = "quarkus.oidc.client-id")
+    private String clientId;
 
     @BeforeEach
     void setUp() {
@@ -170,6 +183,7 @@ class TeamControllerIntegrationTest {
     void updateTeam_GivenInvalidDTOValues_ReturnsBadRequest() {
         ErrorDTO response = given()
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .body(invalidTeamDTO)
                 .put(TEAM_PATH + "/-1")
                 .then()
@@ -191,6 +205,7 @@ class TeamControllerIntegrationTest {
     void updateTeam_GivenInvalidDTONullValues_ReturnsBadRequest() {
         ErrorDTO response = given()
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .body(invalidTeamDTONullValues)
                 .put(TEAM_PATH + "/-1")
 
@@ -214,6 +229,7 @@ class TeamControllerIntegrationTest {
     void updateTeam_GivenInvalidDTONullCountryDTO_ReturnsBadRequest() {
         ErrorDTO response = given()
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .body(invalidTeamDTONullCountryDTO)
                 .put(TEAM_PATH + "/-1")
                 .then()
@@ -235,6 +251,7 @@ class TeamControllerIntegrationTest {
     void updateTeam_GivenInvalidTeamId_ReturnsNotFound() {
         ErrorDTO response = given()
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .body(bayernMunchen)
                 .put(TEAM_PATH + "/-10000")
                 .then()
@@ -252,6 +269,7 @@ class TeamControllerIntegrationTest {
     void updateTeam_GivenValidDTO_ReturnsOK() {
         TeamDTO response = given()
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .body(bayernMunchen)
                 .put(TEAM_PATH + "/-1")
                 .then()
@@ -261,7 +279,7 @@ class TeamControllerIntegrationTest {
         Assertions.assertEquals(germany.getCode(), response.getCountryDTO().getCode());
         Assertions.assertEquals(germany.getName(), response.getCountryDTO().getName());
         Assertions.assertEquals(bayernMunchen.getFounded(), response.getFounded());
-        Assertions.assertEquals(bayernMunchen.getLevel(), response.getLevel());
+        Assertions.assertEquals(8.55, response.getLevel());
         Assertions.assertEquals(bayernMunchen.getName(), response.getName());
         Assertions.assertEquals(bayernMunchen.getPicture(), response.getPicture());
         Assertions.assertEquals(bayernMunchen.getNickName(), response.getNickName());
@@ -271,6 +289,7 @@ class TeamControllerIntegrationTest {
     @Order(30)
     void updateTeamLevel_GivenLowerRangeLevelNotAllowed_ReturnsBadRequest() {
         ErrorDTO response = given()
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .patch(TEAM_PATH + "/-1/level/0.9")
                 .then()
                 .contentType(APPLICATION_JSON)
@@ -286,6 +305,7 @@ class TeamControllerIntegrationTest {
     @Order(31)
     void updateTeamLevel_GivenUpperRangeLevelNotAllowed_ReturnsBadRequest() {
         ErrorDTO response = given()
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .patch(TEAM_PATH + "/-1/level/10.1")
                 .then()
                 .contentType(APPLICATION_JSON)
@@ -301,6 +321,7 @@ class TeamControllerIntegrationTest {
     @Order(32)
     void updateTeamLevel_GivenInvalidTeamId_ReturnsNotFound() {
         ErrorDTO response = given()
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .patch(TEAM_PATH + "/1000000/level/8")
                 .then()
                 .contentType(APPLICATION_JSON)
@@ -316,21 +337,21 @@ class TeamControllerIntegrationTest {
     @Order(33)
     void updateTeamLevel_GivenValidRangeLevel_ReturnsOK() {
         TeamDTO response = given()
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .patch(TEAM_PATH + "/-1/level/8.8")
                 .then()
                 .contentType(APPLICATION_JSON)
                 .statusCode(OK.getStatusCode())
                 .extract().body().as(TeamDTO.class);
 
-        Double level = Double.sum(bayernMunchen.getLevel(), 8.8) / 2;
-
-        Assertions.assertEquals(level, response.getLevel());
+        Assertions.assertEquals(8.675, response.getLevel());
     }
 
     @Test
     @Order(40)
     void deleteTeam_GivenInvalidTeamId_ReturnsNotFound() {
         ErrorDTO response = given()
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .delete(TEAM_PATH + "/1000000")
                 .then()
                 .contentType(APPLICATION_JSON)
@@ -346,6 +367,7 @@ class TeamControllerIntegrationTest {
     @Order(41)
     void deleteTeam_GivenValidTeamId_ReturnsNoContent() {
         given()
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .delete(TEAM_PATH + "/-1")
                 .then()
                 .statusCode(NO_CONTENT.getStatusCode());
@@ -372,6 +394,7 @@ class TeamControllerIntegrationTest {
     void createTeam_GivenInvalidDTOValues_ReturnsBadRequest() {
         ErrorDTO response = given()
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .body(invalidTeamDTO)
                 .post(TEAM_PATH)
                 .then()
@@ -393,6 +416,7 @@ class TeamControllerIntegrationTest {
     void createTeam_GivenInvalidDTONullValues_ReturnsBadRequest() {
         ErrorDTO response = given()
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .body(invalidTeamDTONullValues)
                 .post(TEAM_PATH)
                 .then()
@@ -415,6 +439,7 @@ class TeamControllerIntegrationTest {
     void createTeam_GivenInvalidDTONullCountryDTO_ReturnsBadRequest() {
         ErrorDTO response = given()
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .body(invalidTeamDTONullCountryDTO)
                 .post(TEAM_PATH)
                 .then()
@@ -436,11 +461,12 @@ class TeamControllerIntegrationTest {
     void createTeam_GivenValidDTO_ReturnsCreated() {
         String location = given()
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION,"Bearer "+getAccessToken())
                 .body(bocaJuniors)
                 .post(TEAM_PATH)
                 .then()
                 .statusCode(CREATED.getStatusCode())
-                .extract().header("Location");
+                .extract().header(LOCATION);
 
         Assertions.assertTrue(location.contains(TEAM_PATH));
     }
@@ -497,5 +523,24 @@ class TeamControllerIntegrationTest {
         return new TypeRef<>() {
             // Kept empty on purpose
         };
+    }
+
+    private String getAccessToken() {
+        Map attributes = new HashMap();
+        attributes.put("grant_type", "password");
+        attributes.put("client_id", clientId);
+        attributes.put("client_secret", "6fe5572d-d0f7-4121-8fc4-d2768bf82836");
+        attributes.put("username", "teamuser");
+        attributes.put("password", "teamuser");
+
+        String accessToken = given()
+                .contentType(APPLICATION_FORM_URLENCODED)
+                .formParams(attributes)
+                .post(authServerUrl.concat("/protocol/openid-connect/token"))
+                .then()
+                .statusCode(OK.getStatusCode())
+                .extract().body().jsonPath().getString("access_token");
+
+        return accessToken;
     }
 }

@@ -41,8 +41,7 @@
         <jacoco.version>0.8.4</jacoco.version>
         <pojo.tester.version>0.7.6</pojo.tester.version>
         <mokito.version>3.5.15</mokito.version>
-        <junit-jupiter-version>1.14.3</junit-jupiter-version>
-        <postgresql.version>1.14.3</postgresql.version>
+        <testcontainers.version>1.14.3</testcontainers.version>
         <sonar-plugin.version>3.7.0.1746</sonar-plugin.version>
         <jackson-databind.version>2.11.3</jackson-databind.version>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
@@ -109,15 +108,10 @@
             <!--Test Container dependencies-->
             <dependency>
                 <groupId>org.testcontainers</groupId>
-                <artifactId>junit-jupiter</artifactId>
-                <version>${junit-jupiter-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>postgresql</artifactId>
-                <version>${postgresql.version}</version>
-                <scope>test</scope>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
