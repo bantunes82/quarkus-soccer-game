@@ -6,6 +6,7 @@ import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
+import java.time.Duration;
 import java.util.Map;
 
 public class IdentityAccessManagementResource implements QuarkusTestResourceLifecycleManager {
@@ -14,6 +15,7 @@ public class IdentityAccessManagementResource implements QuarkusTestResourceLife
             .withCommand("-b 0.0.0.0 -Djboss.http.port=8082 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.migration.action=import " +
                     "-Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/tmp/keycloak/realms -Dkeycloak.migration.strategy=OVERWRITE_EXISTING")
             .withClasspathResourceMapping("./keycloak/realms", "/tmp/keycloak/realms/", BindMode.READ_ONLY)
+            .withStartupTimeout(Duration.ofSeconds(120))
             .withExposedPorts(8082)
             .waitingFor(Wait.forHttp("/auth"));
 

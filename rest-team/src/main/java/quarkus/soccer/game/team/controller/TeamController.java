@@ -111,7 +111,7 @@ public class TeamController {
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countCreateTeam", description = "Counts how many times the createTeam method has been invoked", displayName = "Count Create Team")
     @Timed(name = "timeCreateTeam", description = "Times how long it takes to invoke the createTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Create Team")
-    @RolesAllowed("team")
+    @RolesAllowed("team") //NOSONAR
     @POST
     @Consumes(APPLICATION_JSON)
     public Response createTeam(@RequestBody(required = true, content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class)), description = "soccer team to be created") @Valid TeamDTO teamDTO, @Context UriInfo uriInfo) {
@@ -130,7 +130,7 @@ public class TeamController {
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countUpdateTeam", description = "Counts how many times the updateTeam method has been invoked", displayName = "Count Update Team")
     @Timed(name = "timeUpdateTeam", description = "Times how long it takes to invoke the updateTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Update Team")
-    @RolesAllowed("team")
+    @RolesAllowed("team") //NOSONAR
     @PUT
     @Consumes(APPLICATION_JSON)
     @Path("/{id}")
@@ -148,7 +148,7 @@ public class TeamController {
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countUpdateTeamLevel", description = "Counts how many times the updateTeamLevel method has been invoked", displayName = "Count Update Team Level")
     @Timed(name = "timeUpdateTeamLevel", description = "Times how long it takes to invoke the updateTeamLevel method", unit = MetricUnits.MILLISECONDS, displayName = "Time Update Team Level")
-    @RolesAllowed("team")
+    @RolesAllowed("team") //NOSONAR
     @PATCH
     @Path("/{id}/level/{value}")
     public Response updateTeamLevel(@Parameter(required = true, description = "soccer team id") @PathParam("id") Long teamId,
@@ -164,7 +164,7 @@ public class TeamController {
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countDeleteTeam", description = "Counts how many times the deleteTeam method has been invoked", displayName = "Count Delete Team")
     @Timed(name = "timeDeleteTeam", description = "Times how long it takes to invoke the deleteTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Delete Team")
-    @RolesAllowed("team")
+    @RolesAllowed("team") //NOSONAR
     @DELETE
     @Path("{id}")
     public Response deleteTeam(@Parameter(required = true, description = "soccer team id") @PathParam("id") Long teamId) throws EntityNotFoundException {
