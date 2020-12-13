@@ -25,26 +25,27 @@
     <packaging>pom</packaging>
     <name>Quarkus Soccer Game - R00T</name>
     <properties>
-        <surefire-plugin.version>2.22.1</surefire-plugin.version>
-        <maven.compiler.target>11</maven.compiler.target>
+        <surefire-plugin.version>2.22.2</surefire-plugin.version>
+        <quarkus-plugin.version>1.10.3.Final</quarkus-plugin.version>
+        <sonar-plugin.version>3.7.0.1746</sonar-plugin.version>
+        <jacoco-plugin.version>0.8.6</jacoco-plugin.version>
+        <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <quarkus.platform.version>1.10.3.Final</quarkus.platform.version>
+        <testcontainers.version>1.15.1</testcontainers.version>
+        <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.parameters>true</maven.compiler.parameters>
-        <quarkus-plugin.version>1.10.3.Final</quarkus-plugin.version>
-        <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <org.mapstruct.version>[1.4.1.Final]</org.mapstruct.version>
-        <lombok.version>[1.18.14]</lombok.version>
-        <jacoco.version>0.8.4</jacoco.version>
-        <pojo.tester.version>[0.7.6]</pojo.tester.version>
-        <mokito.version>[3.5.15]</mokito.version>
-        <testcontainers.version>1.14.3</testcontainers.version>
-        <sonar-plugin.version>3.7.0.1746</sonar-plugin.version>
-        <jackson-databind.version>[2.11.3]</jackson-databind.version>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <org.mapstruct.version>[1.4.1.Final]</org.mapstruct.version>
+        <lombok.version>[1.18.16]</lombok.version>
+        <jacoco.version>[0.8.6]</jacoco.version>
+        <pojo.tester.version>[0.7.6]</pojo.tester.version>
+        <mokito.version>[3.6.28]</mokito.version>
+        <jackson-databind.version>[2.11.4]</jackson-databind.version>
     </properties>
 
     <modules>
