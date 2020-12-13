@@ -27,23 +27,23 @@
     <properties>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
         <maven.compiler.target>11</maven.compiler.target>
-        <quarkus.platform.version>1.9.1.Final</quarkus.platform.version>
+        <quarkus.platform.version>1.10.3.Final</quarkus.platform.version>
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.parameters>true</maven.compiler.parameters>
-        <quarkus-plugin.version>1.9.1.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>1.10.3.Final</quarkus-plugin.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
-        <lombok.version>1.18.14</lombok.version>
+        <org.mapstruct.version>[1.4.1.Final]</org.mapstruct.version>
+        <lombok.version>[1.18.14]</lombok.version>
         <jacoco.version>0.8.4</jacoco.version>
-        <pojo.tester.version>0.7.6</pojo.tester.version>
-        <mokito.version>3.5.15</mokito.version>
+        <pojo.tester.version>[0.7.6]</pojo.tester.version>
+        <mokito.version>[3.5.15]</mokito.version>
         <testcontainers.version>1.14.3</testcontainers.version>
         <sonar-plugin.version>3.7.0.1746</sonar-plugin.version>
-        <jackson-databind.version>2.11.3</jackson-databind.version>
+        <jackson-databind.version>[2.11.3]</jackson-databind.version>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
     </properties>
 
