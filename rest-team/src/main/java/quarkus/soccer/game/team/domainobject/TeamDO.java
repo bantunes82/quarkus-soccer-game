@@ -1,9 +1,6 @@
 package quarkus.soccer.game.team.domainobject;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import quarkus.soccer.game.team.constants.Validation;
 import quarkus.soccer.game.team.util.Range;
 
@@ -29,7 +26,7 @@ import java.util.Objects;
 @Builder
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class TeamDO {
 
     @Id

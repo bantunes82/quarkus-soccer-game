@@ -1,10 +1,6 @@
 package quarkus.soccer.game.team.datatransferobject;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import quarkus.soccer.game.team.constants.Validation;
 import quarkus.soccer.game.team.util.Range;
@@ -20,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class TeamDTO {
 
