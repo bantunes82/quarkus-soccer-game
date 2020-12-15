@@ -134,7 +134,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void update_GivenNonExistingTeamId_ThrowsEntityNotFoundException() throws EntityNotFoundException {
+    void update_GivenNonExistingTeamId_ThrowsEntityNotFoundException() {
         team1.setId(1000L);
         team1.setNickName("Coringao");
         when(teamRepository.findByIdAndDeletedIsFalse(1L)).thenReturn(Optional.empty());
