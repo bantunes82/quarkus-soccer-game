@@ -13,8 +13,8 @@ public class CountryCodeValidator implements ConstraintValidator<CountryCode, Ob
     private String message;
 
     @Override
-    public void initialize(CountryCode doubleRange) {
-        message = doubleRange.message();
+    public void initialize(CountryCode countryCode) {
+        message = countryCode.message();
     }
 
     @Override

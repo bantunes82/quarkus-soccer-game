@@ -159,7 +159,7 @@ public class TeamController {
     }
 
     @Operation(summary = "Delete the soccer team for the specified team id")
-    @APIResponse(responseCode = "204")
+    @APIResponse(responseCode = "204", description = "Soccer Team deleted")
     @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countDeleteTeam", description = "Counts how many times the deleteTeam method has been invoked", displayName = "Count Delete Team")
