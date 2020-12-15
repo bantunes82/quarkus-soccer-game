@@ -2,7 +2,7 @@
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-This API allows CRUD operations on a soccer team
+This API allows CRUD operations on a soccer team.
 
 ## Before running the application
 
@@ -106,11 +106,11 @@ This is the url to access the metrics from [prometheus](http://localhost:9090/gr
 
 **Grafana**
 
-This is the url to access the dashboard from Soccer Team application [grafana DashBoard](http://localhost:3000).
+This is the url to access the [Grafana DashBoard](http://localhost:3000) from Soccer Team application.
 
 **Keycloak**
 
-This is the url to access the console configuration from [Keycloak console](http://localhost:8082/auth/).
+This is the url to access the [Keycloak console](http://localhost:8082/auth/) configuration.
 The username and password is "admin"
 
 **Testing**
@@ -120,8 +120,8 @@ we have more Unit and towards the top, we have the integrations and
 UI/functional.
 
 A caveat to be mentioned specially when it comes to the Integration
-Tests: as they were pretty complex, to speed up the integration tests,
-the test containers are created before the execution of the test methods of the class and they are
+Tests: as they were pretty complex and to speed up the integration tests,
+the test containers are created before the execution of the test methods in the Integration Test Class and they are
 destroyed after the execution of them.
 
 The coverage is pretty good and you can take a look at the Jacoco plugin
