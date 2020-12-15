@@ -472,7 +472,7 @@ class TeamControllerIntegrationTest {
         Assertions.assertEquals("Country code must have 2 chars, be a existent code and Uppercase", response.getErrors().get("createTeam.teamDTO.countryDTO.code"));
         Assertions.assertEquals("Team founded date must be older than today", response.getErrors().get("createTeam.teamDTO.founded"));
         Assertions.assertEquals("Team Level must be between 1 and 10", response.getErrors().get("createTeam.teamDTO.level"));
-        Assertions.assertEquals("Team name must be between 3 and 30 chars", response.getErrors().get("createTeam.teamDTO.name"));
+        Assertions.assertEquals("Team name must be between 3 and 50 chars", response.getErrors().get("createTeam.teamDTO.name"));
         Assertions.assertNotNull(response.getTimestamp());
     }
 
