@@ -1,6 +1,6 @@
 # quarkus-soccer-game
 
-**This project contains the follow apis**
+**This project contains the follow apis:**
 
 - [rest-team](https://github.com/bantunes82/quarkus-soccer-game/tree/main/rest-team) - This API allows CRUD operations on a soccer team.
 
