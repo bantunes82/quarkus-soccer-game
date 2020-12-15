@@ -1,10 +1,10 @@
 # quarkus-soccer-game
 
-This project contains the follow apis
+**This project contains the follow apis**
 
 - [rest-team](https://github.com/bantunes82/quarkus-soccer-game/tree/main/rest-team) - This API allows CRUD operations on a soccer team.
 
-**This project is using the follow technologies:**
+**It is using the follow technologies:**
 - Quarkus Resteasy
 - Quarkus Resteasy Jackson
 - Quarkus Hibernate Validator
