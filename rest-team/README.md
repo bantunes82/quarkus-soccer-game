@@ -131,9 +131,9 @@ we have more Unit and towards the top, we have the integrations and
 UI/functional.
 
 A caveat to be mentioned specially when it comes to the Integration
-Tests: as they were pretty complex and to speed up the integration tests,
+Tests: as they were pretty complex and to speed up the integration tests execution,
 the test containers are created before the execution of the test methods in the Integration Test Class and they are
-destroyed after the execution of them.
+destroyed after the execution of them and the test methods are executed in specified order.
 
 The coverage is pretty good and you can take a look at the Jacoco plugin
 reports available in the IDE/command line.
