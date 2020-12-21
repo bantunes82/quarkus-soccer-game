@@ -84,7 +84,7 @@ codes).
 
 - For the Soccer team application endpoints
     - Inside the the **Servers** combo box you have to select the value: ***http://localhost:8081***
-    - You have to set the access token for the applications endpoints that have the **LOCKER** signal, to set the access token you have put the value inside the **"Authorize"** field in left side of the page.
+    - You have to set the access token for the applications endpoints that have the **LOCKER** signal, to set the access token you have put the value inside the **"Authorize"** field in right side of the page.
 
       To retrieve the access token for user **teamuser** that belong to the **"team"** role from Keycloak server, you have to run the command below:
         ```shell script
