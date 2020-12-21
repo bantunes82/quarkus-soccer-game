@@ -1,6 +1,7 @@
 package quarkus.soccer.game.team.controller;
 
 import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -32,13 +33,13 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.*;
 
 @QuarkusTest
+@TestHTTPEndpoint(TeamController.class)
 @QuarkusTestResource(DatabaseResource.class)
 @QuarkusTestResource(IdentityAccessManagementResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Tag("integration")
 class TeamControllerIntegrationTest {
 
-    private String TEAM_PATH = "/v1/teams";
     private String TEAM_NAME = "Sport Club Corinthians Paulista";
 
     private CountryDTO germany;
@@ -72,7 +73,7 @@ class TeamControllerIntegrationTest {
     void findRandomTeam_GivenThereIsTeam_ReturnsOK() {
         TeamDTO response = given()
                 .when()
-                .get(TEAM_PATH + "/random")
+                .get("/random")
                 .then()
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -87,7 +88,7 @@ class TeamControllerIntegrationTest {
     void findTeamByName_GivenNoExistentTeamName_ReturnsEmptyTeamList() {
         List<TeamDTO> response = given()
                 .when()
-                .get(TEAM_PATH + "/name/XXXXX")
+                .get("/name/XXXXX")
                 .then()
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -101,7 +102,7 @@ class TeamControllerIntegrationTest {
     void findTeamByName_GivenExistentTeamName_ReturnsTeamListWithOneElement() {
         List<TeamDTO> response = given()
                 .when()
-                .get(TEAM_PATH + "/name/Sport Club Corinthians Paulista")
+                .get("/name/Sport Club Corinthians Paulista")
                 .then()
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -116,7 +117,7 @@ class TeamControllerIntegrationTest {
     void findTeamByCountryCode_GivenNoExistentTeamWithTheCountryCode_ReturnsEmptyTeamList() {
         List<TeamDTO> response = given()
                 .when()
-                .get(TEAM_PATH + "/country/AR")
+                .get("/country/AR")
                 .then()
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -130,7 +131,7 @@ class TeamControllerIntegrationTest {
     void findTeamByCountryCode_GivenInvalidCountryCode_ReturnsBadRequest() {
         ErrorDTO response = given()
                 .when()
-                .get(TEAM_PATH + "/country/XX")
+                .get("/country/XX")
                 .then()
                 .statusCode(BAD_REQUEST.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -148,7 +149,7 @@ class TeamControllerIntegrationTest {
         ErrorDTO response = given()
                 .when()
                 .header(ACCEPT_LANGUAGE, "es")
-                .get(TEAM_PATH + "/country/XX")
+                .get("/country/XX")
                 .then()
                 .statusCode(BAD_REQUEST.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -164,7 +165,7 @@ class TeamControllerIntegrationTest {
     void findTeamByCountryCode_GivenExistentTeamWithTheCountryCode_ReturnsTeamListWithOneElement() {
         List<TeamDTO> response = given()
                 .when()
-                .get(TEAM_PATH + "/country/BR")
+                .get("/country/BR")
                 .then()
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -181,7 +182,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
                 .body(invalidTeamDTO)
-                .put(TEAM_PATH + "/-1")
+                .put("/-1")
                 .then()
                 .statusCode(BAD_REQUEST.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -203,7 +204,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
                 .body(invalidTeamDTONullValues)
-                .put(TEAM_PATH + "/-1")
+                .put("/-1")
                 .then()
                 .statusCode(BAD_REQUEST.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -226,7 +227,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
                 .body(invalidTeamDTONullCountryDTO)
-                .put(TEAM_PATH + "/-1")
+                .put("/-1")
                 .then()
                 .statusCode(BAD_REQUEST.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -248,7 +249,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
                 .body(bayernMunchen)
-                .put(TEAM_PATH + "/-10000")
+                .put("/-10000")
                 .then()
                 .statusCode(NOT_FOUND.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -266,7 +267,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
                 .body(bayernMunchen)
-                .put(TEAM_PATH + "/-1")
+                .put("/-1")
                 .then()
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -288,7 +289,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForNotAllowedRoleUser())
                 .body(bayernMunchen)
-                .put(TEAM_PATH + "/-1")
+                .put("/-1")
                 .then()
                 .statusCode(FORBIDDEN.getStatusCode());
     }
@@ -300,7 +301,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + "XX")
                 .body(bayernMunchen)
-                .put(TEAM_PATH + "/-1")
+                .put("/-1")
                 .then()
                 .statusCode(UNAUTHORIZED.getStatusCode());
     }
@@ -311,7 +312,7 @@ class TeamControllerIntegrationTest {
     void updateTeamLevel_GivenLowerRangeLevelNotAllowed_ReturnsBadRequest() {
         ErrorDTO response = given()
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
-                .patch(TEAM_PATH + "/-1/level/0.9")
+                .patch("/-1/level/0.9")
                 .then()
                 .contentType(APPLICATION_JSON)
                 .statusCode(BAD_REQUEST.getStatusCode())
@@ -327,7 +328,7 @@ class TeamControllerIntegrationTest {
     void updateTeamLevel_GivenUpperRangeLevelNotAllowed_ReturnsBadRequest() {
         ErrorDTO response = given()
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
-                .patch(TEAM_PATH + "/-1/level/10.1")
+                .patch("/-1/level/10.1")
                 .then()
                 .contentType(APPLICATION_JSON)
                 .statusCode(BAD_REQUEST.getStatusCode())
@@ -343,7 +344,7 @@ class TeamControllerIntegrationTest {
     void updateTeamLevel_GivenInvalidTeamId_ReturnsNotFound() {
         ErrorDTO response = given()
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
-                .patch(TEAM_PATH + "/1000000/level/8")
+                .patch("/1000000/level/8")
                 .then()
                 .contentType(APPLICATION_JSON)
                 .statusCode(NOT_FOUND.getStatusCode())
@@ -359,7 +360,7 @@ class TeamControllerIntegrationTest {
     void updateTeamLevel_GivenValidRangeLevelAndAllowedRoleUser_ReturnsOK() {
         TeamDTO response = given()
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
-                .patch(TEAM_PATH + "/-1/level/8.8")
+                .patch("/-1/level/8.8")
                 .then()
                 .contentType(APPLICATION_JSON)
                 .statusCode(OK.getStatusCode())
@@ -374,7 +375,7 @@ class TeamControllerIntegrationTest {
         given()
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForNotAllowedRoleUser())
-                .patch(TEAM_PATH + "/-1/level/8.8")
+                .patch("/-1/level/8.8")
                 .then()
                 .statusCode(FORBIDDEN.getStatusCode());
     }
@@ -385,7 +386,7 @@ class TeamControllerIntegrationTest {
         given()
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + "XX")
-                .patch(TEAM_PATH + "/-1/level/8.8")
+                .patch("/-1/level/8.8")
                 .then()
                 .statusCode(UNAUTHORIZED.getStatusCode());
     }
@@ -395,7 +396,7 @@ class TeamControllerIntegrationTest {
     void deleteTeam_GivenInvalidTeamId_ReturnsNotFound() {
         ErrorDTO response = given()
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
-                .delete(TEAM_PATH + "/1000000")
+                .delete( "/1000000")
                 .then()
                 .contentType(APPLICATION_JSON)
                 .statusCode(NOT_FOUND.getStatusCode())
@@ -411,7 +412,7 @@ class TeamControllerIntegrationTest {
     void deleteTeam_GivenValidTeamIdAndAllowedRoleUser_ReturnsNoContent() {
         given()
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
-                .delete(TEAM_PATH + "/-1")
+                .delete("/-1")
                 .then()
                 .statusCode(NO_CONTENT.getStatusCode());
     }
@@ -422,7 +423,7 @@ class TeamControllerIntegrationTest {
         given()
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForNotAllowedRoleUser())
-                .delete(TEAM_PATH + "/-1")
+                .delete("/-1")
                 .then()
                 .statusCode(FORBIDDEN.getStatusCode());
     }
@@ -433,7 +434,7 @@ class TeamControllerIntegrationTest {
         given()
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + "XX")
-                .delete(TEAM_PATH + "/-1")
+                .delete("/-1")
                 .then()
                 .statusCode(UNAUTHORIZED.getStatusCode());
     }
@@ -443,7 +444,7 @@ class TeamControllerIntegrationTest {
     void findRandomTeam_GivenThereIsNoTeam_ReturnsNotFound() {
         ErrorDTO response = given()
                 .when()
-                .get(TEAM_PATH + "/random")
+                .get("/random")
                 .then()
                 .statusCode(NOT_FOUND.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -461,7 +462,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
                 .body(invalidTeamDTO)
-                .post(TEAM_PATH)
+                .post()
                 .then()
                 .statusCode(BAD_REQUEST.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -483,7 +484,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
                 .body(invalidTeamDTONullValues)
-                .post(TEAM_PATH)
+                .post()
                 .then()
                 .statusCode(BAD_REQUEST.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -506,7 +507,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
                 .body(invalidTeamDTONullCountryDTO)
-                .post(TEAM_PATH)
+                .post()
                 .then()
                 .statusCode(BAD_REQUEST.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -528,12 +529,12 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForAllowedRoleUser())
                 .body(bocaJuniors)
-                .post(TEAM_PATH)
+                .post()
                 .then()
                 .statusCode(CREATED.getStatusCode())
                 .extract().header(LOCATION);
 
-        Assertions.assertTrue(location.contains(TEAM_PATH));
+        Assertions.assertTrue(location.contains("/v1/teams"));
     }
 
     @Test
@@ -543,7 +544,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + getAccessTokenForNotAllowedRoleUser())
                 .body(bocaJuniors)
-                .post(TEAM_PATH)
+                .post()
                 .then()
                 .statusCode(FORBIDDEN.getStatusCode());
     }
@@ -555,7 +556,7 @@ class TeamControllerIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + "XX")
                 .body(bocaJuniors)
-                .post(TEAM_PATH)
+                .post()
                 .then()
                 .statusCode(UNAUTHORIZED.getStatusCode());
     }
