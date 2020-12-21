@@ -108,6 +108,17 @@ This is the url to access the metrics from [prometheus](http://localhost:9090/gr
 
 This is the url to access the [Grafana DashBoard](http://localhost:3000) from Soccer Team application.
 
+The Grafana DashBoard should looks like this:
+
+![Application Metrics](https://i.ibb.co/LhFr5Wx/application-metrics.png
+"Application Metrics")
+
+![Vendor Metrics](https://i.ibb.co/TY9BNdL/vendor-metrics.png
+"Vendor Metrics")
+
+![Base Metrics](https://i.ibb.co/TgRKHkC/base-metrics.png
+"Base Metrics")
+
 **Keycloak**
 
 This is the url to access the [Keycloak console](http://localhost:8082/auth/) configuration.
