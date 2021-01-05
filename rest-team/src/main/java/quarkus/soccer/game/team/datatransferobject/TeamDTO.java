@@ -1,6 +1,8 @@
 package quarkus.soccer.game.team.datatransferobject;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import quarkus.soccer.game.team.constants.Validation;
 import quarkus.soccer.game.team.util.Range;
@@ -26,6 +28,12 @@ public class TeamDTO {
 
     private String nickName;
 
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Schema(example = "1910-07-01", type = SchemaType.STRING,
+            implementation = LocalDate.class,
+            pattern = "yyyy-MM-dd",
+            description = "Team founded date")
     @Past(message = Validation.TEAM_FOUNDED_PAST)
     @NotNull(message = Validation.TEAM_FOUNDED_BLANK)
     private LocalDate founded;
