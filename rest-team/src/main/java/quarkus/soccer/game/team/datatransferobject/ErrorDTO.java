@@ -3,9 +3,11 @@ package quarkus.soccer.game.team.datatransferobject;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 
 @Schema(description="Errors", required = true)
@@ -13,11 +15,11 @@ import java.util.Map;
 @NoArgsConstructor
 public class ErrorDTO {
 
-    private Instant timestamp = Instant.now();
+    private final Instant timestamp = Instant.now();
 
-    private Map<String, String> errors;
+    private Map<String, String> errors = new HashMap<>();
 
-    public ErrorDTO(Map<String, String> errors) {
+    public ErrorDTO(@NonNull Map<String, String> errors) {
         this.errors = errors;
     }
 

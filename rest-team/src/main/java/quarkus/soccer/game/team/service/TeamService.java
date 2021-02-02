@@ -53,19 +53,18 @@ public class TeamService {
         TeamDO teamSaved = findTeamChecked(teamId);
         Optional<CountryDO> countrySaved = countryRepository.findByCountryCode(team.getCountryDO().getCode());
 
-        updateTeam(team, teamSaved, countrySaved);
+        updateTeam(team, teamSaved, countrySaved.orElse(team.getCountryDO()));
 
         return teamSaved;
     }
 
-    private void updateTeam(TeamDO team, TeamDO teamSaved, Optional<CountryDO> countrySaved) {
-        teamSaved.setNickName(team.getNickName());
+    private void updateTeam(TeamDO team, TeamDO teamSaved, CountryDO countryDO) {
+        team.getNickName().ifPresent(teamSaved::setNickName);
         teamSaved.setLevel(generateNewLevel(team.getLevel(), teamSaved.getLevel()));
         teamSaved.setName(team.getName());
         teamSaved.setFounded(team.getFounded());
         teamSaved.setPicture(team.getPicture());
 
-        CountryDO countryDO = countrySaved.orElse(team.getCountryDO());
         teamSaved.setCountryDO(countryDO);
     }
 

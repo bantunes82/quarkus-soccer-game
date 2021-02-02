@@ -65,7 +65,7 @@ class TeamMapperTest {
         TeamDO result = teamMapper.toTeamDO(teamDTO);
 
         Assertions.assertEquals(teamDTO.getName(), result.getName());
-        Assertions.assertEquals(teamDTO.getNickName(), result.getNickName());
+        Assertions.assertEquals(teamDTO.getNickName(), result.getNickName().get());
         Assertions.assertEquals(teamDTO.getPicture(), result.getPicture());
         Assertions.assertEquals(teamDTO.getLevel(), result.getLevel());
         Assertions.assertEquals(teamDTO.getFounded(), result.getFounded());
@@ -87,7 +87,7 @@ class TeamMapperTest {
         TeamDTO result = teamMapper.toTeamDTO(teamDO);
 
         Assertions.assertEquals(teamDO.getName(), result.getName());
-        Assertions.assertEquals(teamDO.getNickName(), result.getNickName());
+        Assertions.assertEquals(teamDO.getNickName().get(), result.getNickName());
         Assertions.assertEquals(teamDO.getPicture(), result.getPicture());
         Assertions.assertEquals(teamDO.getLevel(), result.getLevel());
         Assertions.assertEquals(teamDO.getFounded(), result.getFounded());
@@ -111,7 +111,7 @@ class TeamMapperTest {
 
         Assertions.assertEquals(1, results.size());
         Assertions.assertEquals(teamDO.getName(), result.getName());
-        Assertions.assertEquals(teamDO.getNickName(), result.getNickName());
+        Assertions.assertEquals(teamDO.getNickName().get(), result.getNickName());
         Assertions.assertEquals(teamDO.getPicture(), result.getPicture());
         Assertions.assertEquals(teamDO.getLevel(), result.getLevel());
         Assertions.assertEquals(teamDO.getFounded(), result.getFounded());

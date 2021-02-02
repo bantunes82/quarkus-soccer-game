@@ -20,6 +20,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Optional;
 
 @Entity
 @Table(name = "team", uniqueConstraints = @UniqueConstraint(name = "uc_team", columnNames = {"name", "country"}))
@@ -72,6 +73,10 @@ public class TeamDO {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, countryDO);
+    }
+
+    public Optional<String> getNickName() {
+        return Optional.ofNullable(nickName);
     }
 
 }
