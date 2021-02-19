@@ -81,10 +81,8 @@ concern in respecting Restful endpoints (as well as the Http Status
 codes).
 
 **Swagger - How to call the endpoints via swagger-ui**
-
 - For the Soccer team application endpoints
-    - Inside the the **Servers** combo box you have to select the value: ***http://localhost:8081***
-    - You have to set the access token for the applications endpoints that have the **LOCKER** signal, to set the access token you have put the value inside the **"Authorize"** field in right side of the page.
+    - You have to set the Authorization header for the applications endpoints that have the **LOCKER** signal, to set the Authorization header you have put the access token value inside the **"Authorize"** field in the right side of the page.
 
       To retrieve the access token for user **teamuser** that belong to the **"team"** role from Keycloak server, you have to run the command below:
         ```shell script
@@ -95,10 +93,15 @@ codes).
           curl -X POST http://localhost:8082/auth/realms/team-realm/protocol/openid-connect/token  --user team-client:6fe5572d-d0f7-4121-8fc4-d2768bf82836 -H 'content-type: application/x-www-form-urlencoded' -d 'username=test&password=test&grant_type=password'
         ```
 
-- For the MicroProfile Health endpoints
-  - Inside the the **Servers** combo box you have to select the value: ***http://localhost:8081/rest-team***
+ ![Swagger](https://i.ibb.co/PtVrRNB/swagger.png "Swagger Endpoints")
 
- ![Swagger](https://i.ibb.co/1MfXfk0/swagger-ui.png "Swagger Endpoints")
+**Health UI**
+
+This is the url to see the health of the components that this application depends on [healthUI](http://localhost:8081/rest-team/q/health-ui/).
+
+The Health UI page should looks like this:
+
+![Health UI](https://i.ibb.co/8Xywcnq/healthUI.png "health UI")
 
 **Prometheus**
 

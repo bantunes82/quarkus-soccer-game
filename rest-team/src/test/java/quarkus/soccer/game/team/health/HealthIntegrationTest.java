@@ -35,6 +35,7 @@ class HealthIntegrationTest {
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
                 .body(containsString("Database connections health check"))
+                .body(containsString("Keycloak connections health check"))
                 .body(containsString("UP"));
     }
 
@@ -49,6 +50,7 @@ class HealthIntegrationTest {
                 .body(containsString("Property: quarkus.log.level"))
                 .body(containsString("Property: quarkus.log.category.quarkus.soccer.game.team.level"))
                 .body(containsString("Database connections health check"))
+                .body(containsString("Keycloak connections health check"))
                 .body(containsString("UP"));
     }
 }
