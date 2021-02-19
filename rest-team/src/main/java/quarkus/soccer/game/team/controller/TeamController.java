@@ -15,6 +15,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import quarkus.soccer.game.team.controller.mapper.TeamMapper;
 import quarkus.soccer.game.team.datatransferobject.ErrorDTO;
 import quarkus.soccer.game.team.datatransferobject.TeamDTO;
@@ -47,6 +48,7 @@ import java.util.List;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+@Tag(name = "soccer team", description = "Anybody interested in soccer team")
 @JBossLog
 @Path("/v1/teams")
 @Produces(APPLICATION_JSON)

@@ -26,11 +26,11 @@
     <name>Quarkus Soccer Game - R00T</name>
     <properties>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
-        <quarkus-plugin.version>1.10.3.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>1.11.3.Final</quarkus-plugin.version>
         <sonar-plugin.version>3.7.0.1746</sonar-plugin.version>
         <jacoco-plugin.version>0.8.6</jacoco-plugin.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
-        <quarkus.platform.version>1.10.3.Final</quarkus.platform.version>
+        <quarkus.platform.version>1.11.3.Final</quarkus.platform.version>
         <testcontainers.version>1.15.1</testcontainers.version>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
@@ -123,5 +123,19 @@
             <!--Test Container dependencies -->
         </dependencies>
     </dependencyManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-maven-plugin</artifactId>
+                    <version>${quarkus-plugin.version}</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
