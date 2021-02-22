@@ -37,7 +37,7 @@ The application can be packaged using:
 mvn package
 ```
 
-It produces the `rest-team-1.0.0-SNAPSHOT-runner.jar` file in the
+It produces the `rest-team-1.0-runner.jar` file in the
 `/target` directory. Be aware that it is not an `--uber-jar` as the
 dependencies are copied into the `target/lib` directory. If you want to
 build an `--uber-jar`_, just add the `--uber-jar` option to the command
@@ -48,7 +48,7 @@ mvn package -PuberJar
 ```
 
 The application is now runnable using `java -jar
-target/rest-team-1.0.0-SNAPSHOT-runner.jar`.
+target/rest-team-1.0-runner.jar`.
 
 ## Creating a native executable
 
@@ -66,7 +66,7 @@ mvn package -Pnative -Dquarkus.native.container-build=true
 ```
 
 You can then execute your native executable with:
-`./target/rest-team-1.0.0-SNAPSHOT-runner`
+`./target/rest-team-1.0-runner`
 
 If you want to learn more about building native executables, please
 consult https://quarkus.io/guides/maven-tooling.html.
