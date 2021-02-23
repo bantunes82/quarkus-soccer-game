@@ -15,19 +15,16 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Schema(description="Team Soccer", required = true)
-@Builder
 @Getter
-@Setter
+@Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor
 public class TeamDTO {
 
     @NotBlank(message = Validation.TEAM_NAME_BLANK)
     @Size(min = 3, max = 50, message = Validation.TEAM_NAME_SIZE)
-    private String name;
+    private final String name;
 
-    private String nickName;
-
+    private final String nickName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Schema(example = "1910-07-01", type = SchemaType.STRING,
@@ -36,16 +33,16 @@ public class TeamDTO {
             description = "Team founded date")
     @Past(message = Validation.TEAM_FOUNDED_PAST)
     @NotNull(message = Validation.TEAM_FOUNDED_BLANK)
-    private LocalDate founded;
+    private final LocalDate founded;
 
     @Range(min = 1.0, max = 10.0)
-    private Double level;
+    private final Double level;
 
     @NotBlank(message = Validation.TEAM_PICTURE_BLANK)
-    private String picture;
+    private final String picture;
 
     @NotNull(message = Validation.TEAM_COUNTRY_NULL)
     @Valid
-    private CountryDTO countryDTO;
+    private final CountryDTO countryDTO;
 
 }

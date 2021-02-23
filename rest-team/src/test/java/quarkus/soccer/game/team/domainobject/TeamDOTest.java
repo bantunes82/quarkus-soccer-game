@@ -40,7 +40,7 @@ class TeamDOTest {
         final Class<?> teamDO = TeamDO.class;
 
         assertPojoMethodsFor(teamDO)
-                .testing(Method.CONSTRUCTOR, Method.TO_STRING, Method.SETTER)
+                .testing(Method.CONSTRUCTOR, Method.SETTER)
                 .areWellImplemented();
     }
 

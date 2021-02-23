@@ -12,7 +12,7 @@ class CountryDTOTest {
         final Class<?> countryDTO = CountryDTO.class;
 
         assertPojoMethodsFor(countryDTO)
-                .testing(Method.CONSTRUCTOR, Method.GETTER, Method.SETTER)
+                .testing(Method.CONSTRUCTOR, Method.GETTER)
                 .areWellImplemented();
     }
 

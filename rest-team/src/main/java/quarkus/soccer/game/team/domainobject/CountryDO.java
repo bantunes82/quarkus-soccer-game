@@ -1,8 +1,6 @@
 package quarkus.soccer.game.team.domainobject;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import quarkus.soccer.game.team.constants.Validation;
 import quarkus.soccer.game.team.util.CountryCode;
 
@@ -18,7 +16,8 @@ import javax.validation.constraints.Size;
 @Table(name = "country", uniqueConstraints = {
         @UniqueConstraint(name = "uc_country_code", columnNames = {"code"})
 })
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CountryDO {

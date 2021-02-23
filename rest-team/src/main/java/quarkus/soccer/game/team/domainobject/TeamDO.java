@@ -24,10 +24,11 @@ import java.util.Optional;
 
 @Entity
 @Table(name = "team", uniqueConstraints = @UniqueConstraint(name = "uc_team", columnNames = {"name", "country"}))
+@Getter
+@Setter
 @Builder
-@Data
-@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class TeamDO {
 
     @Id
@@ -52,6 +53,7 @@ public class TeamDO {
     private String picture;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean deleted = false;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

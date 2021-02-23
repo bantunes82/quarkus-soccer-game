@@ -12,7 +12,7 @@ class TeamDTOTest {
         final Class<?> teamDTO = TeamDTO.class;
 
         assertPojoMethodsFor(teamDTO)
-                .testing(Method.CONSTRUCTOR, Method.GETTER, Method.SETTER)
+                .testing(Method.CONSTRUCTOR, Method.GETTER)
                 .areWellImplemented();
     }
 
