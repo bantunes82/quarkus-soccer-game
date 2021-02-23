@@ -17,9 +17,8 @@ import javax.validation.constraints.Size;
         @UniqueConstraint(name = "uc_country_code", columnNames = {"code"})
 })
 @Getter
-@Setter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class CountryDO {
 
     @Id

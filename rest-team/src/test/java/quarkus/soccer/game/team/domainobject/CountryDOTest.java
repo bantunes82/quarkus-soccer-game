@@ -12,7 +12,7 @@ class CountryDOTest {
         final Class<?> countryDO = CountryDO.class;
 
         assertPojoMethodsFor(countryDO)
-                .testing(Method.CONSTRUCTOR, Method.GETTER, Method.SETTER)
+                .testing(Method.CONSTRUCTOR, Method.GETTER)
                 .areWellImplemented();
     }
 

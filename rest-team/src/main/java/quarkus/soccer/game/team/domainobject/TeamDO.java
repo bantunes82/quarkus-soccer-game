@@ -28,7 +28,7 @@ import java.util.Optional;
 @Setter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class TeamDO {
 
     @Id
