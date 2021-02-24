@@ -1,4 +1,4 @@
-package quarkus.soccer.game.team.controller;
+package quarkus.soccer.game.team.resource;
 
 import lombok.extern.jbosslog.JBossLog;
 import org.eclipse.microprofile.metrics.MetricUnits;
@@ -16,7 +16,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import quarkus.soccer.game.team.controller.mapper.TeamMapper;
+import quarkus.soccer.game.team.resource.mapper.TeamMapper;
 import quarkus.soccer.game.team.datatransferobject.ErrorDTO;
 import quarkus.soccer.game.team.datatransferobject.TeamDTO;
 import quarkus.soccer.game.team.domainobject.TeamDO;
@@ -58,13 +58,13 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
                 description = "Access token for the user that belongs to TEAM role",
                 scheme = "Bearer")}
 )
-public class TeamController {
+public class TeamResource {
 
     private TeamService teamService;
     private TeamMapper teamMapper;
 
     @Inject
-    public TeamController(TeamService teamService, TeamMapper teamMapper) {
+    public TeamResource(TeamService teamService, TeamMapper teamMapper) {
         this.teamService = teamService;
         this.teamMapper = teamMapper;
     }

@@ -1,4 +1,4 @@
-package quarkus.soccer.game.team.controller;
+package quarkus.soccer.game.team.resource;
 
 import org.jboss.resteasy.specimpl.ResteasyUriInfo;
 import org.junit.jupiter.api.Assertions;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import quarkus.soccer.game.team.controller.mapper.TeamMapper;
+import quarkus.soccer.game.team.resource.mapper.TeamMapper;
 import quarkus.soccer.game.team.datatransferobject.CountryDTO;
 import quarkus.soccer.game.team.datatransferobject.TeamDTO;
 import quarkus.soccer.game.team.domainobject.CountryDO;
@@ -29,14 +29,14 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class TeamControllerTest {
+class TeamResourceTest {
 
     @Mock
     private TeamService teamService;
     @Mock
     private TeamMapper teamMapper;
     @InjectMocks
-    private TeamController teamController;
+    private TeamResource teamResource;
 
     private CountryDO countryDO;
     private CountryDTO countryDTO;
@@ -74,7 +74,7 @@ class TeamControllerTest {
         when(teamService.findRandom()).thenReturn(teamDO);
         when(teamMapper.toTeamDTO(teamDO)).thenReturn(teamDTO);
 
-        Response response = teamController.findRandomTeam();
+        Response response = teamResource.findRandomTeam();
 
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals("Sport Club Corinthians Paulista", ((TeamDTO) response.getEntity()).getName());
@@ -84,7 +84,7 @@ class TeamControllerTest {
     void findRandomTeam_GivenThereIsNoTeam_ThrowsEntityNotFoundException() throws EntityNotFoundException {
         when(teamService.findRandom()).thenThrow(new EntityNotFoundException("Could not find any team"));
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> teamController.findRandomTeam(), "Could not find any team");
+        Assertions.assertThrows(EntityNotFoundException.class, () -> teamResource.findRandomTeam(), "Could not find any team");
     }
 
     @Test
@@ -92,7 +92,7 @@ class TeamControllerTest {
         when(teamService.findByName("Sport Club Corinthians Paulista")).thenReturn(Arrays.asList(teamDO));
         when(teamMapper.toTeamDTOList(Arrays.asList(teamDO))).thenReturn(Arrays.asList(teamDTO));
 
-        Response response = teamController.findTeamByName("Sport Club Corinthians Paulista");
+        Response response = teamResource.findTeamByName("Sport Club Corinthians Paulista");
 
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals(1, ((List<TeamDTO>) response.getEntity()).size());
@@ -104,7 +104,7 @@ class TeamControllerTest {
         when(teamService.findByName("XXX")).thenReturn(Collections.emptyList());
         when(teamMapper.toTeamDTOList(Collections.emptyList())).thenReturn(Collections.emptyList());
 
-        Response response = teamController.findTeamByName("XXX");
+        Response response = teamResource.findTeamByName("XXX");
 
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals(0, ((List<TeamDTO>) response.getEntity()).size());
@@ -115,7 +115,7 @@ class TeamControllerTest {
         when(teamService.findByCountryCode("BR", 0, 10)).thenReturn(Arrays.asList(teamDO));
         when(teamMapper.toTeamDTOList(Arrays.asList(teamDO))).thenReturn(Arrays.asList(teamDTO));
 
-        Response response = teamController.findTeamByCountryCode("BR", 0, 10);
+        Response response = teamResource.findTeamByCountryCode("BR", 0, 10);
 
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals(1, ((List<TeamDTO>) response.getEntity()).size());
@@ -127,7 +127,7 @@ class TeamControllerTest {
         when(teamService.findByCountryCode("BR", 0, 10)).thenReturn(Collections.emptyList());
         when(teamMapper.toTeamDTOList(Collections.emptyList())).thenReturn(Collections.emptyList());
 
-        Response response = teamController.findTeamByCountryCode("BR", 0, 10);
+        Response response = teamResource.findTeamByCountryCode("BR", 0, 10);
 
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals(0, ((List<TeamDTO>) response.getEntity()).size());
@@ -140,7 +140,7 @@ class TeamControllerTest {
 
         UriInfo uriInfo = new ResteasyUriInfo("/rest-team/v1/teams", "");
 
-        Response response = teamController.createTeam(teamDTO, uriInfo);
+        Response response = teamResource.createTeam(teamDTO, uriInfo);
 
         Assertions.assertEquals(201, response.getStatus());
         Assertions.assertEquals("/rest-team/v1/teams/1", response.getLocation().toString());
@@ -152,7 +152,7 @@ class TeamControllerTest {
         when(teamService.update(1L, teamDO)).thenReturn(teamDO);
         when(teamMapper.toTeamDTO(teamDO)).thenReturn(teamDTO);
 
-        Response response = teamController.updateTeam(1L, teamDTO);
+        Response response = teamResource.updateTeam(1L, teamDTO);
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals("Sport Club Corinthians Paulista", ((TeamDTO) response.getEntity()).getName());
     }
@@ -162,7 +162,7 @@ class TeamControllerTest {
         when(teamMapper.toTeamDO(teamDTO)).thenReturn(teamDO);
         when(teamService.update(1L, teamDO)).thenThrow(new EntityNotFoundException("Could not find team with id: 1"));
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> teamController.updateTeam(1L, teamDTO), "Could not find team with id: 1");
+        Assertions.assertThrows(EntityNotFoundException.class, () -> teamResource.updateTeam(1L, teamDTO), "Could not find team with id: 1");
     }
 
     @Test
@@ -170,7 +170,7 @@ class TeamControllerTest {
         when(teamService.updateLevel(1L, 8d)).thenReturn(teamDO);
         when(teamMapper.toTeamDTO(teamDO)).thenReturn(teamDTO);
 
-        Response response = teamController.updateTeamLevel(1L, 8d);
+        Response response = teamResource.updateTeamLevel(1L, 8d);
 
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals("Sport Club Corinthians Paulista", ((TeamDTO) response.getEntity()).getName());
@@ -180,7 +180,7 @@ class TeamControllerTest {
     void updateTeamLevel_GivenInvalidTeamId_ThrowsEntityNotFoundException() throws EntityNotFoundException {
         when(teamService.updateLevel(1L, 8d)).thenThrow(new EntityNotFoundException("Could not find team with id: 1"));
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> teamController.updateTeamLevel(1L, 8d), "Could not find team with id: 1");
+        Assertions.assertThrows(EntityNotFoundException.class, () -> teamResource.updateTeamLevel(1L, 8d), "Could not find team with id: 1");
     }
 
 
@@ -188,7 +188,7 @@ class TeamControllerTest {
     void deleteTeam_GivenValidTeamId_DeleteTeam() throws EntityNotFoundException {
         doNothing().when(teamService).delete(1L);
 
-        Response response = teamController.deleteTeam(1L);
+        Response response = teamResource.deleteTeam(1L);
 
         Assertions.assertEquals(204, response.getStatus());
     }
@@ -197,6 +197,6 @@ class TeamControllerTest {
     void deleteTeam_GivenInvalidTeamId_ThrowsEntityNotFoundException() throws EntityNotFoundException {
         doThrow(new EntityNotFoundException("Could not find team with id: 1")).when(teamService).delete(1L);
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> teamController.deleteTeam(1L), "Could not find team with id: 1");
+        Assertions.assertThrows(EntityNotFoundException.class, () -> teamResource.deleteTeam(1L), "Could not find team with id: 1");
     }
 }

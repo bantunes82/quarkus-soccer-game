@@ -1,4 +1,4 @@
-package quarkus.soccer.game.team.controller.mapper;
+package quarkus.soccer.game.team.resource.mapper;
 
 import org.mapstruct.MapperConfig;
 

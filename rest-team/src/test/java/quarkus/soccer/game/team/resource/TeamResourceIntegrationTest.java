@@ -1,4 +1,4 @@
-package quarkus.soccer.game.team.controller;
+package quarkus.soccer.game.team.resource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
@@ -32,12 +32,12 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.*;
 
 @QuarkusTest
-@TestHTTPEndpoint(TeamController.class)
+@TestHTTPEndpoint(TeamResource.class)
 @QuarkusTestResource(DatabaseResource.class)
 @QuarkusTestResource(IdentityAccessManagementResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Tag("integration")
-class TeamControllerIntegrationTest {
+class TeamResourceIntegrationTest {
 
     private String TEAM_NAME = "Sport Club Corinthians Paulista";
 
