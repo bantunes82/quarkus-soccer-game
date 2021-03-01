@@ -12,10 +12,9 @@ class TeamDOTest {
 
     private final String teamName = "Sport Club Corinthians Paulista";
     private final CountryDO countryDO = new CountryDO(1l,"Brasil", "BR");
-    private final Long id = 1L;
 
     private final TeamDO team1 = TeamDO.builder()
-            .id(id)
+            .id(1L)
             .name(teamName)
             .nickName("Timao")
             .founded(LocalDate.of(1910, 9, 1))
@@ -25,7 +24,7 @@ class TeamDOTest {
             .build();
 
     private final TeamDO team2 = TeamDO.builder()
-            .id(id)
+            .id(2L)
             .name(teamName)
             .nickName("Time do Povo")
             .founded(LocalDate.of(1910, 9, 2))
@@ -48,14 +47,6 @@ class TeamDOTest {
     void equals_Custom() {
         assertEquals(team1, team2);
     }
-
-
-    @Test
-    void equals_CustomWithIdDifferent() {
-        team2.setId(2L);
-        assertNotEquals(team1, team2);
-    }
-
 
     @Test
     void equals_CustomWithNameDifferent() {

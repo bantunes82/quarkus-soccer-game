@@ -62,23 +62,21 @@ public class TeamDO {
     @Valid
     private CountryDO countryDO;
 
+    public Optional<String> getNickName() {
+        return Optional.ofNullable(nickName);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TeamDO teamDO = (TeamDO) o;
-        return id.equals(teamDO.id) &&
-                name.equals(teamDO.name) &&
+        return name.equals(teamDO.name) &&
                 countryDO.equals(teamDO.countryDO);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, countryDO);
+        return Objects.hash(name, countryDO);
     }
-
-    public Optional<String> getNickName() {
-        return Optional.ofNullable(nickName);
-    }
-
 }
