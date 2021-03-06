@@ -11,12 +11,13 @@ import java.util.Map;
 
 public class IdentityAccessManagementResource implements QuarkusTestResourceLifecycleManager {
 
-    private static final GenericContainer IDENTITY_ACCESS_MANAGEMENT = new GenericContainer("quay.io/keycloak/keycloak:11.0.3")
+    private static final GenericContainer IDENTITY_ACCESS_MANAGEMENT = new GenericContainer("quay.io/keycloak/keycloak:12.0.4")
             .withCommand("-b 0.0.0.0 -Djboss.http.port=8082 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.migration.action=import " +
                     "-Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/tmp/keycloak/realms -Dkeycloak.migration.strategy=OVERWRITE_EXISTING")
             .withClasspathResourceMapping("./keycloak/realms", "/tmp/keycloak/realms/", BindMode.READ_ONLY)
             .withStartupTimeout(Duration.ofSeconds(120))
             .withExposedPorts(8082)
+            .withEnv("DB_VENDOR", "h2")
             .waitingFor(Wait.forHttp("/auth"));
 
     @Override
