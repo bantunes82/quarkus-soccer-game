@@ -17,10 +17,10 @@ public class TeamRepository implements PanacheRepository<TeamDO> {
 
     public Optional<TeamDO> findRandomAndDeletedIsFalse() {
         long countTeams = count();
-        int randomVillain = count() == 0 ? 1 : random.nextInt((int) countTeams);
+        int randomTeam = count() == 0 ? 1 : random.nextInt((int) countTeams);
 
         return find("deleted = false")
-                .page(randomVillain, 1)
+                .page(randomTeam, 1)
                 .firstResultOptional();
     }
 
