@@ -60,6 +60,7 @@ class TeamServiceTest {
 
         TeamDO teamDO = teamService.findRandom();
 
+        verify(teamRepository).findRandomAndDeletedIsFalse();
         Assertions.assertEquals(team1, teamDO);
     }
 
@@ -70,7 +71,7 @@ class TeamServiceTest {
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
             teamService.findRandom();
         }, "Could not find any team");
-
+        verify(teamRepository).findRandomAndDeletedIsFalse();
     }
 
     @Test
@@ -79,6 +80,7 @@ class TeamServiceTest {
 
         List<TeamDO> teams = teamService.findByName("Sport Club Corinthians Paulista");
 
+        verify(teamRepository).findByNameAndDeletedIsFalse("Sport Club Corinthians Paulista");
         Assertions.assertEquals(1, teams.size());
         Assertions.assertTrue(teams.contains(team1));
     }
@@ -89,6 +91,7 @@ class TeamServiceTest {
 
         List<TeamDO> teams = teamService.findByName("Sport Club Corinthians Paulista");
 
+        verify(teamRepository).findByNameAndDeletedIsFalse("Sport Club Corinthians Paulista");
         Assertions.assertEquals(0, teams.size());
     }
 
@@ -98,6 +101,7 @@ class TeamServiceTest {
 
         List<TeamDO> teams = teamService.findByCountryCode("BR", 1, 1);
 
+        verify(teamRepository).findByCountryCodeAndDeletedIsFalse("BR", 1, 1);
         Assertions.assertEquals(1, teams.size());
         Assertions.assertTrue(teams.contains(team1));
     }
@@ -108,6 +112,7 @@ class TeamServiceTest {
 
         List<TeamDO> teams = teamService.findByCountryCode("BR", 1, 1);
 
+        verify(teamRepository).findByCountryCodeAndDeletedIsFalse("BR", 1, 1);
         Assertions.assertEquals(0, teams.size());
     }
 
@@ -120,6 +125,7 @@ class TeamServiceTest {
 
         Assertions.assertEquals(team1, team);
         verify(teamRepository).persist(team1);
+        verify(countryRepository).findByCountryCode("BR");
     }
 
     @Test
@@ -130,6 +136,7 @@ class TeamServiceTest {
 
         TeamDO updateTeam = teamService.update(1L, team1);
 
+        verify(teamRepository).findByIdAndDeletedIsFalse(1L);
         Assertions.assertEquals(team1, updateTeam);
     }
 
@@ -142,6 +149,7 @@ class TeamServiceTest {
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
             teamService.update(1L, team1);
         }, "Could not find team with id: 1");
+        verify(teamRepository).findByIdAndDeletedIsFalse(1L);
     }
 
     @Test
@@ -153,6 +161,7 @@ class TeamServiceTest {
 
         TeamDO updatedTeam = teamService.updateLevel(1L, newRate);
 
+        verify(teamRepository).findByIdAndDeletedIsFalse(1L);
         Assertions.assertEquals(expected, updatedTeam.getLevel());
     }
 
@@ -163,6 +172,7 @@ class TeamServiceTest {
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
             teamService.updateLevel(1L, 3.5);
         }, "Could not find team with id: 1");
+        verify(teamRepository).findByIdAndDeletedIsFalse(1L);
     }
 
     @Test
@@ -171,6 +181,7 @@ class TeamServiceTest {
 
         teamService.delete(1L);
 
+        verify(teamRepository).findByIdAndDeletedIsFalse(1L);
         Assertions.assertTrue(team1.getDeleted());
     }
 
@@ -181,5 +192,6 @@ class TeamServiceTest {
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
             teamService.delete(1L);
         }, "Could not find team with id: 1");
+        verify(teamRepository).findByIdAndDeletedIsFalse(1L);
     }
 }

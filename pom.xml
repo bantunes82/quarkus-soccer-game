@@ -45,7 +45,7 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <jacoco.version>[0.8.6]</jacoco.version>
         <pojo.tester.version>[0.7.6]</pojo.tester.version>
-        <mokito.version>[3.6.28]</mokito.version>
+        <mokito.version>[3.8.0]</mokito.version>
         <jackson-databind.version>[2.11.4]</jackson-databind.version>
     </properties>
 
