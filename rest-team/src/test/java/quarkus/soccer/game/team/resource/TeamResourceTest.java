@@ -23,9 +23,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -76,6 +75,8 @@ class TeamResourceTest {
 
         Response response = teamResource.findRandomTeam();
 
+        verify(teamService).findRandom();
+        verify(teamMapper).toTeamDTO(teamDO);
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals("Sport Club Corinthians Paulista", ((TeamDTO) response.getEntity()).getName());
     }
@@ -85,6 +86,7 @@ class TeamResourceTest {
         when(teamService.findRandom()).thenThrow(new EntityNotFoundException("Could not find any team"));
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> teamResource.findRandomTeam(), "Could not find any team");
+        verify(teamService).findRandom();
     }
 
     @Test
@@ -94,6 +96,8 @@ class TeamResourceTest {
 
         Response response = teamResource.findTeamByName("Sport Club Corinthians Paulista");
 
+        verify(teamService).findByName("Sport Club Corinthians Paulista");
+        verify(teamMapper).toTeamDTOList(Arrays.asList(teamDO));
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals(1, ((List<TeamDTO>) response.getEntity()).size());
         Assertions.assertEquals("Sport Club Corinthians Paulista", ((List<TeamDTO>) response.getEntity()).get(0).getName());
@@ -106,6 +110,8 @@ class TeamResourceTest {
 
         Response response = teamResource.findTeamByName("XXX");
 
+        verify(teamService).findByName("XXX");
+        verify(teamMapper).toTeamDTOList(Collections.emptyList());
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals(0, ((List<TeamDTO>) response.getEntity()).size());
     }
@@ -117,6 +123,8 @@ class TeamResourceTest {
 
         Response response = teamResource.findTeamByCountryCode("BR", 0, 10);
 
+        verify(teamService).findByCountryCode("BR", 0, 10);
+        verify(teamMapper).toTeamDTOList(Arrays.asList(teamDO));
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals(1, ((List<TeamDTO>) response.getEntity()).size());
         Assertions.assertEquals("Sport Club Corinthians Paulista", ((List<TeamDTO>) response.getEntity()).get(0).getName());
@@ -129,6 +137,8 @@ class TeamResourceTest {
 
         Response response = teamResource.findTeamByCountryCode("BR", 0, 10);
 
+        verify(teamService).findByCountryCode("BR", 0, 10);
+        verify(teamMapper).toTeamDTOList(Collections.emptyList());
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals(0, ((List<TeamDTO>) response.getEntity()).size());
     }
@@ -139,9 +149,10 @@ class TeamResourceTest {
         when(teamService.create(teamDO)).thenReturn(teamDO);
 
         UriInfo uriInfo = new ResteasyUriInfo("/rest-team/v1/teams", "");
-
         Response response = teamResource.createTeam(teamDTO, uriInfo);
 
+        verify(teamMapper).toTeamDO(teamDTO);
+        verify(teamService).create(teamDO);
         Assertions.assertEquals(201, response.getStatus());
         Assertions.assertEquals("/rest-team/v1/teams/1", response.getLocation().toString());
     }
@@ -153,6 +164,10 @@ class TeamResourceTest {
         when(teamMapper.toTeamDTO(teamDO)).thenReturn(teamDTO);
 
         Response response = teamResource.updateTeam(1L, teamDTO);
+
+        verify(teamMapper).toTeamDO(teamDTO);
+        verify(teamService).update(1L, teamDO);
+        verify(teamMapper).toTeamDTO(teamDO);
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals("Sport Club Corinthians Paulista", ((TeamDTO) response.getEntity()).getName());
     }
@@ -163,6 +178,8 @@ class TeamResourceTest {
         when(teamService.update(1L, teamDO)).thenThrow(new EntityNotFoundException("Could not find team with id: 1"));
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> teamResource.updateTeam(1L, teamDTO), "Could not find team with id: 1");
+        verify(teamMapper).toTeamDO(teamDTO);
+        verify(teamService).update(1L, teamDO);
     }
 
     @Test
@@ -172,6 +189,8 @@ class TeamResourceTest {
 
         Response response = teamResource.updateTeamLevel(1L, 8d);
 
+        verify(teamService).updateLevel(1L, 8d);
+        verify(teamMapper).toTeamDTO(teamDO);
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals("Sport Club Corinthians Paulista", ((TeamDTO) response.getEntity()).getName());
     }
@@ -181,6 +200,7 @@ class TeamResourceTest {
         when(teamService.updateLevel(1L, 8d)).thenThrow(new EntityNotFoundException("Could not find team with id: 1"));
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> teamResource.updateTeamLevel(1L, 8d), "Could not find team with id: 1");
+        verify(teamService).updateLevel(1L, 8d);
     }
 
 
@@ -190,6 +210,7 @@ class TeamResourceTest {
 
         Response response = teamResource.deleteTeam(1L);
 
+        verify(teamService).delete(1L);
         Assertions.assertEquals(204, response.getStatus());
     }
 
@@ -198,5 +219,6 @@ class TeamResourceTest {
         doThrow(new EntityNotFoundException("Could not find team with id: 1")).when(teamService).delete(1L);
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> teamResource.deleteTeam(1L), "Could not find team with id: 1");
+        verify(teamService).delete(1L);
     }
 }
