@@ -212,10 +212,10 @@ class TeamResourceIntegrationTest {
         Assertions.assertEquals(6, response.getErrors().size());
         Assertions.assertEquals("Country name must be filled", response.getErrors().get("updateTeam.teamDTO.countryDTO.name"));
         Assertions.assertEquals("Country code must have 2 chars, be a existent code and Uppercase", response.getErrors().get("updateTeam.teamDTO.countryDTO.code"));
+        Assertions.assertEquals("Team picture must be filled", response.getErrors().get("updateTeam.teamDTO.picture"));
         Assertions.assertEquals("Team founded must be filled", response.getErrors().get("updateTeam.teamDTO.founded"));
         Assertions.assertEquals("Team Level must be between 1 and 10", response.getErrors().get("updateTeam.teamDTO.level"));
         Assertions.assertEquals("Team name must be filled", response.getErrors().get("updateTeam.teamDTO.name"));
-        Assertions.assertEquals("Country name must be filled", response.getErrors().get("updateTeam.teamDTO.countryDTO.name"));
         Assertions.assertNotNull(response.getTimestamp());
     }
 
@@ -395,7 +395,7 @@ class TeamResourceIntegrationTest {
     void deleteTeam_GivenInvalidTeamId_ReturnsNotFound() {
         ErrorDTO response = given()
                 .auth().oauth2(getAccessTokenForAllowedRoleUser())
-                .delete( "/1000000")
+                .delete("/1000000")
                 .then()
                 .contentType(APPLICATION_JSON)
                 .statusCode(NOT_FOUND.getStatusCode())
