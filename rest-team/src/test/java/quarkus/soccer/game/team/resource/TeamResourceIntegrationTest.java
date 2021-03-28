@@ -492,10 +492,10 @@ class TeamResourceIntegrationTest {
         Assertions.assertEquals(6, response.getErrors().size());
         Assertions.assertEquals("Country name must be filled", response.getErrors().get("createTeam.teamDTO.countryDTO.name"));
         Assertions.assertEquals("Country code must have 2 chars, be a existent code and Uppercase", response.getErrors().get("createTeam.teamDTO.countryDTO.code"));
+        Assertions.assertEquals("Team picture must be filled", response.getErrors().get("createTeam.teamDTO.picture"));
         Assertions.assertEquals("Team founded must be filled", response.getErrors().get("createTeam.teamDTO.founded"));
         Assertions.assertEquals("Team Level must be between 1 and 10", response.getErrors().get("createTeam.teamDTO.level"));
         Assertions.assertEquals("Team name must be filled", response.getErrors().get("createTeam.teamDTO.name"));
-        Assertions.assertEquals("Country name must be filled", response.getErrors().get("createTeam.teamDTO.countryDTO.name"));
         Assertions.assertNotNull(response.getTimestamp());
     }
 
