@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Map;
 
 public class DatabaseResource implements QuarkusTestResourceLifecycleManager {
-    private static final PostgreSQLContainer DATABASE = new PostgreSQLContainer<>("postgres:10.5")
+    private static final PostgreSQLContainer DATABASE = new PostgreSQLContainer<>("postgres:13.2")
             .withDatabaseName("teams_database")
             .withUsername("team")
             .withPassword("team")
