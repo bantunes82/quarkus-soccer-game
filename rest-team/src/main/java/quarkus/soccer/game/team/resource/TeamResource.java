@@ -46,6 +46,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
 
+import static javax.ws.rs.core.HttpHeaders.LOCATION;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Tag(name = "soccer team", description = "Anybody interested in soccer team")
@@ -109,7 +110,7 @@ public class TeamResource {
     }
 
     @Operation(summary = "Create a soccer team")
-    @APIResponse(responseCode = "201", description = "The URI of the created soccer team", headers = {@Header(description = "URI location of the created soccer team", schema = @Schema(implementation = URI.class))})
+    @APIResponse(responseCode = "201", description = "The URI of the created soccer team", headers = {@Header(name = LOCATION, description = "URI location of the created soccer team", schema = @Schema(implementation = URI.class))})
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countCreateTeam", description = "Counts how many times the createTeam method has been invoked", displayName = "Count Create Team")
     @Timed(name = "timeCreateTeam", description = "Times how long it takes to invoke the createTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Create Team")
