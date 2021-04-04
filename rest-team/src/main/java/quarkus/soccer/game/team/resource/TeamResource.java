@@ -12,6 +12,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
@@ -71,8 +72,10 @@ public class TeamResource {
     }
 
     @Operation(summary = "Returns a random soccer team")
-    @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "When there is at least one soccer team available")
-    @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find any team\"}}")), description = "When there is no soccer team available")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "When there is at least one soccer team available"),
+            @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find any team\"}}")), description = "When there is no soccer team available")
+    })
     @Counted(name = "countFindRandomTeam", description = "Counts how many times the findRandomTeam method has been invoked", displayName = "Count Find Random Team")
     @Timed(name = "timeFindRandomTeam", description = "Times how long it takes to invoke the findRandomTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Find Random Team")
     @GET
@@ -84,7 +87,9 @@ public class TeamResource {
     }
 
     @Operation(summary = "Returns a list of soccer teams that has the specified name")
-    @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO[].class, required = true)), description = "Returns a list of soccer teams for the specified name")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO[].class, required = true)), description = "Returns a list of soccer teams for the specified name")
+    })
     @Counted(name = "countFindTeamByName", description = "Counts how many times the findTeamByName method has been invoked", displayName = "Count Find Team by Name")
     @Timed(name = "timeFindTeamByName", description = "Times how long it takes to invoke the findTeamByName method", unit = MetricUnits.MILLISECONDS, displayName = "Time Find Team by Name")
     @GET
@@ -96,7 +101,10 @@ public class TeamResource {
     }
 
     @Operation(summary = "Returns all the soccer teams for the specified Country Code")
-    @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO[].class, required = true)), description = "Returns a list the soccer teams for the specified Country Code")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO[].class, required = true)), description = "Returns a list the soccer teams for the specified Country Code"),
+            @APIResponse(responseCode = "400", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"countryCode; \": \"Country code must have 2 chars, be a existent code and Uppercase\"}}")), description = "When the countryCode is invalid")
+    })
     @Counted(name = "countFindTeamByCountryCode", description = "Counts how many times the findTeamByCountryCode method has been invoked", displayName = "Count Find Team by Country Code")
     @Timed(name = "timeFindTeamByCountryCode", description = "Times how long it takes to invoke the findTeamByCountryCode method", unit = MetricUnits.MILLISECONDS, displayName = "Time Find Team by Country Code")
     @GET
@@ -110,14 +118,21 @@ public class TeamResource {
     }
 
     @Operation(summary = "Create a soccer team")
-    @APIResponse(responseCode = "201", description = "The URI of the created soccer team", headers = {@Header(name = LOCATION, description = "URI location of the created soccer team", schema = @Schema(implementation = URI.class))})
+    @APIResponses(value = {
+            @APIResponse(responseCode = "201", description = "The URI of the created soccer team", headers = {@Header(name = LOCATION, description = "URI location of the created soccer team", schema = @Schema(implementation = URI.class))}),
+            @APIResponse(responseCode = "400", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"name; \": \"Team name must be between 3 and 50 chars\"}}")), description = "When the content of the TeamDTO is invalid"),
+            @APIResponse(responseCode = "401", description = "The Authorization header was not informed or the value is invalid"),
+            @APIResponse(responseCode = "403", description = "The Authorization header value is not allowed")
+    })
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countCreateTeam", description = "Counts how many times the createTeam method has been invoked", displayName = "Count Create Team")
     @Timed(name = "timeCreateTeam", description = "Times how long it takes to invoke the createTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Create Team")
     @RolesAllowed("team") //NOSONAR
     @POST
     @Consumes(APPLICATION_JSON)
-    public Response createTeam(@RequestBody(required = true, content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class)), description = "soccer team to be created") @Valid TeamDTO teamDTO, @Context UriInfo uriInfo) {
+    public Response createTeam
+            (@RequestBody(required = true, content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class)), description = "soccer team to be created") @Valid TeamDTO
+                     teamDTO, @Context UriInfo uriInfo) {
         TeamDO teamDO = teamMapper.toTeamDO(teamDTO);
         TeamDO teamSaved = teamService.create(teamDO);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(Long.toString(teamSaved.getId()));
@@ -128,8 +143,13 @@ public class TeamResource {
     }
 
     @Operation(summary = "Update a soccer team for the specified team id")
-    @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "Returns the soccer team updated")
-    @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "Returns the soccer team updated"),
+            @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id"),
+            @APIResponse(responseCode = "400", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"name; \": \"Team name must be between 3 and 50 chars\"}}")), description = "When the content of the TeamDTO is invalid"),
+            @APIResponse(responseCode = "401", description = "The Authorization header was not informed or the value is invalid"),
+            @APIResponse(responseCode = "403", description = "The Authorization header value is not allowed")
+    })
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countUpdateTeam", description = "Counts how many times the updateTeam method has been invoked", displayName = "Count Update Team")
     @Timed(name = "timeUpdateTeam", description = "Times how long it takes to invoke the updateTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Update Team")
@@ -146,8 +166,13 @@ public class TeamResource {
     }
 
     @Operation(summary = "Update the soccer team level for the specified team id")
-    @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "Returns the soccer team with the updated level")
-    @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "Returns the soccer team with the updated level"),
+            @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id"),
+            @APIResponse(responseCode = "400", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"level; \": \"Team Level must be between 1 and 10\"}}")), description = "When the team level is invalid"),
+            @APIResponse(responseCode = "401", description = "The Authorization header was not informed or the value is invalid"),
+            @APIResponse(responseCode = "403", description = "The Authorization header value is not allowed")
+    })
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countUpdateTeamLevel", description = "Counts how many times the updateTeamLevel method has been invoked", displayName = "Count Update Team Level")
     @Timed(name = "timeUpdateTeamLevel", description = "Times how long it takes to invoke the updateTeamLevel method", unit = MetricUnits.MILLISECONDS, displayName = "Time Update Team Level")
@@ -162,8 +187,12 @@ public class TeamResource {
     }
 
     @Operation(summary = "Delete the soccer team for the specified team id")
-    @APIResponse(responseCode = "204", description = "Soccer Team deleted")
-    @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "204", description = "Soccer Team deleted"),
+            @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id"),
+            @APIResponse(responseCode = "401", description = "The Authorization header was not informed or the value is invalid"),
+            @APIResponse(responseCode = "403", description = "The Authorization header value is not allowed")
+    })
     @SecurityRequirement(name = "accessToken")
     @Counted(name = "countDeleteTeam", description = "Counts how many times the deleteTeam method has been invoked", displayName = "Count Delete Team")
     @Timed(name = "timeDeleteTeam", description = "Times how long it takes to invoke the deleteTeam method", unit = MetricUnits.MILLISECONDS, displayName = "Time Delete Team")
