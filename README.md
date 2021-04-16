@@ -6,6 +6,7 @@
 
 **It is using the follow technologies:**
 - Quarkus Resteasy
+- Quarkus Rest Client
 - Quarkus Resteasy Jackson
 - Quarkus Hibernate Validator
 - Quarkus Hibernate Panache
