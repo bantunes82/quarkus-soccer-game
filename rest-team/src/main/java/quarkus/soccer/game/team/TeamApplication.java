@@ -2,8 +2,11 @@ package quarkus.soccer.game.team;
 
 import org.eclipse.microprofile.openapi.annotations.ExternalDocumentation;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.info.Contact;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
+import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
 
 import javax.ws.rs.core.Application;
 
@@ -18,6 +21,12 @@ import javax.ws.rs.core.Application;
                         url = "https://github.com/bantunes82",
                         email = "bantunes82@gmail.com")),
         externalDocs = @ExternalDocumentation(url = "https://github.com/bantunes82/quarkus-soccer-game/tree/main/rest-team")
+)
+@SecuritySchemes(value = {
+        @SecurityScheme(securitySchemeName = "accessToken",
+                type = SecuritySchemeType.HTTP,
+                description = "Access token for the user that belongs to TEAM role",
+                scheme = "Bearer")}
 )
 public class TeamApplication extends Application {
 }

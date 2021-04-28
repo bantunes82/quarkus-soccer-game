@@ -5,7 +5,6 @@ import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.headers.Header;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -14,8 +13,6 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
-import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
-import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import quarkus.soccer.game.team.resource.mapper.TeamMapper;
 import quarkus.soccer.game.team.datatransferobject.ErrorDTO;
@@ -54,12 +51,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @JBossLog
 @Path("/v1/teams")
 @Produces(APPLICATION_JSON)
-@SecuritySchemes(value = {
-        @SecurityScheme(securitySchemeName = "accessToken",
-                type = SecuritySchemeType.HTTP,
-                description = "Access token for the user that belongs to TEAM role",
-                scheme = "Bearer")}
-)
 public class TeamResource {
 
     private TeamService teamService;
