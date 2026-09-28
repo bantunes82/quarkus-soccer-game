@@ -86,11 +86,11 @@ codes).
 
       To retrieve the access token for user **teamuser** that belong to the **"team"** role from Keycloak server, you have to run the command below:
         ```shell script
-          curl -X POST http://localhost:8082/auth/realms/team-realm/protocol/openid-connect/token  --user team-client:6fe5572d-d0f7-4121-8fc4-d2768bf82836 -H 'content-type: application/x-www-form-urlencoded' -d 'username=teamuser&password=teamuser&grant_type=password'
+          curl -X POST http://localhost:8080/auth/realms/team-realm/protocol/openid-connect/token  --user team-client:6fe5572d-d0f7-4121-8fc4-d2768bf82836 -H 'content-type: application/x-www-form-urlencoded' -d 'username=teamuser&password=teamuser&grant_type=password'
         ```
       To retrieve the access token for user **test** that does not belong to the **"team"** role from Keycloak server, you have to run the command below:
         ```shell script
-          curl -X POST http://localhost:8082/auth/realms/team-realm/protocol/openid-connect/token  --user team-client:6fe5572d-d0f7-4121-8fc4-d2768bf82836 -H 'content-type: application/x-www-form-urlencoded' -d 'username=test&password=test&grant_type=password'
+          curl -X POST http://localhost:8080/auth/realms/team-realm/protocol/openid-connect/token  --user team-client:6fe5572d-d0f7-4121-8fc4-d2768bf82836 -H 'content-type: application/x-www-form-urlencoded' -d 'username=test&password=test&grant_type=password'
         ```
 
  ![Swagger](https://i.ibb.co/PtVrRNB/swagger.png "Swagger Endpoints")
@@ -124,7 +124,7 @@ The Grafana DashBoard should looks like this:
 
 **Keycloak**
 
-This is the url to access the [Keycloak console](http://localhost:8082/auth/) configuration.
+This is the url to access the [Keycloak console](http://localhost:8080/auth/) configuration.
 The username and password is "admin"
 
 **Testing**
