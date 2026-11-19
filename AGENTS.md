@@ -15,6 +15,7 @@ All commands below assume the SDKMAN prefix above has been applied in the same s
 - One unit class: `mvn -pl rest-team clean -Dtest=TeamServiceTest test`.
 - Full JVM verification: `mvn -pl rest-team clean verify`. This also runs the `integration`-tagged tests and requires a working Docker daemon for PostgreSQL and Keycloak Testcontainers; the external Compose stack is not the test fixture.
 - One integration class: `mvn -pl rest-team clean -Dtest=TeamResourceIntegrationTest verify`. Use `verify`, not `integration-test`, so JaCoCo's post-integration restore/report phases run.
+- Testcontainers must stay ≥ 1.21.x (Docker 29 rejects the API 1.32 used by older versions), and the root POM pins JNA 5.13.0 over the Quarkus BOM's 5.3.1, which has no macOS arm64 native library. The Keycloak test container listens on and exposes `8082`; keep `jboss.http.port` and `withExposedPorts` in sync. If Keycloak fails with `team-realm.json (Permission denied)`, the realm file needs to be world-readable (`chmod -R go+rX rest-team/src/test/resources/keycloak`).
 - Native suite: `mvn -pl rest-team clean verify -Pnative`; add `-Dquarkus.native.container-build=true` when GraalVM is unavailable.
 - Dev mode: first start dependencies with `docker-compose -f infrastructure/docker-compose-linux.yaml up`, then run `mvn -pl rest-team compile quarkus:dev`. The API is at `http://localhost:8081/rest-team`.
 - JaCoCo uses offline instrumentation. If Maven is interrupted or fails after instrumentation, the next run may report “Cannot process instrumented class”; rerun with `clean`.
