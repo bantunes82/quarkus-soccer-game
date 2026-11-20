@@ -560,6 +560,51 @@ class TeamResourceIntegrationTest {
                 .statusCode(UNAUTHORIZED.getStatusCode());
     }
 
+    @Test
+    @Order(66)
+    void createTeam_GivenExistingNameAndCountry_ReturnsConflict() {
+        ErrorDTO response = given()
+                .contentType(APPLICATION_JSON)
+                .auth().oauth2(getAccessTokenForAllowedRoleUser())
+                .body(bocaJuniors)
+                .post()
+                .then()
+                .statusCode(CONFLICT.getStatusCode())
+                .contentType(APPLICATION_JSON)
+                .extract().body().as(ErrorDTO.class);
+
+        Assertions.assertEquals(1, response.getErrors().size());
+        Assertions.assertEquals("Team with name 'Club Atlético Boca Juniors' already exists for country: AR", response.getErrors().get("error; "));
+        Assertions.assertNotNull(response.getTimestamp());
+    }
+
+    @Test
+    @Order(67)
+    void createTeam_GivenNameAndCountryOfDeletedTeam_ReturnsConflict() {
+        given()
+                .contentType(APPLICATION_JSON)
+                .auth().oauth2(getAccessTokenForAllowedRoleUser())
+                .body(bayernMunchen)
+                .post()
+                .then()
+                .statusCode(CONFLICT.getStatusCode());
+    }
+
+    @Test
+    @Order(68)
+    void findRandomTeam_GivenDeletedAndActiveTeams_AlwaysReturnsActiveTeam() {
+        for (int i = 0; i < 20; i++) {
+            TeamDTO response = given()
+                    .when()
+                    .get("/random")
+                    .then()
+                    .statusCode(OK.getStatusCode())
+                    .contentType(APPLICATION_JSON)
+                    .extract().body().as(TeamDTO.class);
+
+            Assertions.assertEquals(bocaJuniors.getName(), response.getName());
+        }
+    }
 
     private void createBayerMunchenTeam() {
         germany = new CountryDTO("Germany", "DE");

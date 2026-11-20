@@ -18,6 +18,7 @@ import quarkus.soccer.game.team.resource.mapper.TeamMapper;
 import quarkus.soccer.game.team.datatransferobject.ErrorDTO;
 import quarkus.soccer.game.team.datatransferobject.TeamDTO;
 import quarkus.soccer.game.team.domainobject.TeamDO;
+import quarkus.soccer.game.team.exception.EntityAlreadyExistsException;
 import quarkus.soccer.game.team.exception.EntityNotFoundException;
 import quarkus.soccer.game.team.service.TeamService;
 import quarkus.soccer.game.team.util.CountryCode;
@@ -112,6 +113,7 @@ public class TeamResource {
     @APIResponses(value = {
             @APIResponse(responseCode = "201", description = "The URI of the created soccer team", headers = {@Header(name = LOCATION, description = "URI location of the created soccer team", schema = @Schema(implementation = URI.class))}),
             @APIResponse(responseCode = "400", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"name; \": \"Team name must be between 3 and 50 chars\"}}")), description = "When the content of the TeamDTO is invalid"),
+            @APIResponse(responseCode = "409", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Team with name 'Sport Club Corinthians Paulista' already exists for country: BR\"}}")), description = "When a soccer team with the same name already exists for the country"),
             @APIResponse(responseCode = "401", description = "The Authorization header was not informed or the value is invalid"),
             @APIResponse(responseCode = "403", description = "The Authorization header value is not allowed")
     })
@@ -123,7 +125,7 @@ public class TeamResource {
     @Consumes(APPLICATION_JSON)
     public Response createTeam
             (@RequestBody(required = true, content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class)), description = "soccer team to be created") @Valid TeamDTO
-                     teamDTO, @Context UriInfo uriInfo) {
+                     teamDTO, @Context UriInfo uriInfo) throws EntityAlreadyExistsException {
         TeamDO teamDO = teamMapper.toTeamDO(teamDTO);
         TeamDO teamSaved = teamService.create(teamDO);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(Long.toString(teamSaved.getId()));
@@ -138,6 +140,7 @@ public class TeamResource {
             @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class, required = true)), description = "Returns the soccer team updated"),
             @APIResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Could not find team with id: {id}\"}}")), description = "When there is no soccer team available for the specified id"),
             @APIResponse(responseCode = "400", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"name; \": \"Team name must be between 3 and 50 chars\"}}")), description = "When the content of the TeamDTO is invalid"),
+            @APIResponse(responseCode = "409", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = ErrorDTO.class, required = true, example = "{\"timestamp\": 1604906081.774793,\"errors\": {\"error; \": \"Team with name 'Sport Club Corinthians Paulista' already exists for country: BR\"}}")), description = "When another soccer team with the same name already exists for the country"),
             @APIResponse(responseCode = "401", description = "The Authorization header was not informed or the value is invalid"),
             @APIResponse(responseCode = "403", description = "The Authorization header value is not allowed")
     })
@@ -149,7 +152,7 @@ public class TeamResource {
     @Consumes(APPLICATION_JSON)
     @Path("/{id}")
     public Response updateTeam(@Parameter(required = true, description = "soccer team id") @PathParam("id") Long teamId,
-                               @RequestBody(required = true, content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class)), description = "soccer team to be updated") @Valid TeamDTO teamDTO) throws EntityNotFoundException {
+                               @RequestBody(required = true, content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = TeamDTO.class)), description = "soccer team to be updated") @Valid TeamDTO teamDTO) throws EntityNotFoundException, EntityAlreadyExistsException {
         TeamDO teamDO = teamMapper.toTeamDO(teamDTO);
         TeamDO teamUpdated = teamService.update(teamId, teamDO);
 

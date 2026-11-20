@@ -1,9 +1,14 @@
-version: "3"
+name: quarkus-soccer-game
 
 services:
   database:
-    image: "postgres:13.2"
-    container_name: "soccer-database"
+    image: postgres:13.2
+    container_name: soccer-database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
     ports:
       - "5432:5432"
     environment:
@@ -13,12 +18,14 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:12.0.4
+    # This Keycloak version is only published for amd64; Apple Silicon runs it through emulation.
+    platform: linux/amd64
     container_name: keycloak
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://127.0.0.1:8080/auth || exit 1"]
       interval: 10s
       timeout: 10s
-      retries: 6
+      retries: 12
     environment:
       - DB_VENDOR=h2
       - KEYCLOAK_USER=admin
@@ -30,18 +37,20 @@ services:
       - ./keycloak/realms/team-realm.json:/tmp/keycloak/realms/team-realm.json:ro
 
   prometheus:
-    image: "prom/prometheus"
-    network_mode: 'host' # On Linux, this is required to let Prometheus access the other containers.
-    container_name: "prometheus"
+    image: prom/prometheus:v3.14.0
+    container_name: prometheus
+    # rest-team runs on the host (quarkus:dev or java -jar); host-gateway makes it reachable on Linux and macOS.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus/configuration/prometheus-linux.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/configuration/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    restart: unless-stopped
 
   grafana:
     build: grafana
-    network_mode: 'host' # On Linux, this is required to let Prometheus access the other containers.
-    container_name: "grafana"
+    container_name: grafana
     user: "root"
     restart: unless-stopped
     ports:

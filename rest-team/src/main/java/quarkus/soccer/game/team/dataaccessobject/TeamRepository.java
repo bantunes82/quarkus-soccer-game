@@ -16,12 +16,24 @@ public class TeamRepository implements PanacheRepository<TeamDO> {
     Random random = new SecureRandom();
 
     public Optional<TeamDO> findRandomAndDeletedIsFalse() {
-        long countTeams = count();
-        int randomTeam = count() == 0 ? 1 : random.nextInt((int) countTeams);
+        long countTeams = count("deleted = false");
+        if (countTeams == 0) {
+            return Optional.empty();
+        }
+        int randomTeam = random.nextInt((int) countTeams);
 
         return find("deleted = false")
                 .page(randomTeam, 1)
                 .firstResultOptional();
+    }
+
+    // Soft-deleted teams are included on purpose: the uc_team unique constraint also covers them.
+    public boolean existsByNameAndCountryCode(String name, String countryCode) {
+        return count("name = ?1 and countryDO.code = ?2", name, countryCode) > 0;
+    }
+
+    public boolean existsByNameAndCountryCodeAndIdNot(String name, String countryCode, Long id) {
+        return count("name = ?1 and countryDO.code = ?2 and id <> ?3", name, countryCode, id) > 0;
     }
 
     public Optional<TeamDO> findByIdAndDeletedIsFalse(Long id) {

@@ -13,6 +13,7 @@ import quarkus.soccer.game.team.datatransferobject.CountryDTO;
 import quarkus.soccer.game.team.datatransferobject.TeamDTO;
 import quarkus.soccer.game.team.domainobject.CountryDO;
 import quarkus.soccer.game.team.domainobject.TeamDO;
+import quarkus.soccer.game.team.exception.EntityAlreadyExistsException;
 import quarkus.soccer.game.team.exception.EntityNotFoundException;
 import quarkus.soccer.game.team.service.TeamService;
 
@@ -144,7 +145,7 @@ class TeamResourceTest {
     }
 
     @Test
-    void createTeam_ReturnsTeam() {
+    void createTeam_ReturnsTeam() throws EntityAlreadyExistsException {
         when(teamMapper.toTeamDO(teamDTO)).thenReturn(teamDO);
         when(teamService.create(teamDO)).thenReturn(teamDO);
 
@@ -158,7 +159,17 @@ class TeamResourceTest {
     }
 
     @Test
-    void updateTeam_GivenValidTeamId_ReturnsTeam() throws EntityNotFoundException {
+    void createTeam_GivenExistingTeam_ThrowsEntityAlreadyExistsException() throws EntityAlreadyExistsException {
+        when(teamMapper.toTeamDO(teamDTO)).thenReturn(teamDO);
+        when(teamService.create(teamDO)).thenThrow(new EntityAlreadyExistsException("Team with name 'Sport Club Corinthians Paulista' already exists for country: BR"));
+
+        UriInfo uriInfo = new ResteasyUriInfo("/rest-team/v1/teams", "");
+        Assertions.assertThrows(EntityAlreadyExistsException.class, () -> teamResource.createTeam(teamDTO, uriInfo));
+        verify(teamService).create(teamDO);
+    }
+
+    @Test
+    void updateTeam_GivenValidTeamId_ReturnsTeam() throws EntityNotFoundException, EntityAlreadyExistsException {
         when(teamMapper.toTeamDO(teamDTO)).thenReturn(teamDO);
         when(teamService.update(1L, teamDO)).thenReturn(teamDO);
         when(teamMapper.toTeamDTO(teamDO)).thenReturn(teamDTO);
@@ -173,7 +184,7 @@ class TeamResourceTest {
     }
 
     @Test
-    void updateTeam_GivenInvalidTeamId_ThrowsEntityNotFoundException() throws EntityNotFoundException {
+    void updateTeam_GivenInvalidTeamId_ThrowsEntityNotFoundException() throws EntityNotFoundException, EntityAlreadyExistsException {
         when(teamMapper.toTeamDO(teamDTO)).thenReturn(teamDO);
         when(teamService.update(1L, teamDO)).thenThrow(new EntityNotFoundException("Could not find team with id: 1"));
 
