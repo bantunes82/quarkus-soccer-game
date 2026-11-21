@@ -6,7 +6,9 @@ import quarkus.soccer.game.team.util.CountryCode;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
@@ -23,7 +25,8 @@ import java.util.Objects;
 public class CountryDO {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name = "country_seq", sequenceName = "country_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "country_seq")
     private Long id;
 
     @NotBlank(message = Validation.COUNTRY_NAME_BLANK)

@@ -26,14 +26,14 @@ All commands below assume the SDKMAN prefix above has been applied in the same s
 
 ## Runtime and code flow
 
-- `application.properties` points to local PostgreSQL on `5432` and Keycloak on `8080`. Non-production startup uses Hibernate `drop-and-create` and loads `src/main/resources/import.sql`, so it destroys and reseeds the configured database.
+- `application.properties` points to local PostgreSQL on `5432` and Keycloak on `8080`. Flyway (`migrate-at-start`) creates and evolves the database schema. Versioned migrations live in `src/main/resources/db/migration` (`V1__create_schema.sql` creates the `country`/`team` tables, the `country_seq`/`team_seq` sequences, the unique constraints and the `fk_team_country` FK, which must stay in sync with the `@SequenceGenerator`/`@Table`/`@ForeignKey` names in the entities). Initial data lives in `src/main/resources/db/data/V2__insert_countries_and_teams.sql` (6 countries with ids `-1`..`-6` and 29 teams with ids `-1`..`-29`, every insert `ON CONFLICT DO NOTHING`), applied by every profile except `test`. Add schema changes as new `V<n>__*.sql` files (version numbers are shared across `db/migration` and `db/data`); never edit an applied migration. The `dev` profile uses `clean-at-start`, so it destroys and reseeds the configured database.
 - The request flow is `TeamResource` (REST/auth/validation) -> `TeamService` (transactions/domain behavior) -> Panache repositories/entities. MapStruct bridges DTOs and entities; implementations under `target/generated-sources/annotations` are generated and must not be edited.
 - Mutations require the Keycloak role `team`; reads are public. Deletes are soft deletes, and level updates average the submitted level with the stored level rather than replacing it.
-- The `prod` profile uses Hibernate `update` and does not seed data.
+- The `prod` profile applies `db/migration` and `db/data` (schema, countries and teams) and uses `baseline-on-migrate` so a non-empty database without Flyway history is baselined at version 1 instead of failing.
 - `(name, country)` is unique even for soft-deleted teams (`uc_team`). `TeamService` checks this before create/update (excluding the team's own id on update) and throws `EntityAlreadyExistsException`, which `EntityAlreadyExistsExceptionHandler` maps to 409. Checked domain exceptions plus `ExceptionMapper`s in `handler/` are the error-handling pattern.
 
 ## Test conventions
 
-- `src/test/resources/import.sql` deliberately shadows the main seed data and creates only the records expected by integration tests.
+- The `test` profile applies `db/migration` plus `src/test/resources/db/test-data/V2__test_data.sql` instead of `db/data`: it creates only Brazil, Spain and the Corinthians team (id `-1`), which the integration tests rely on (e.g. creating Boca Juniors returns 201 and `/random` returns 404 once Corinthians is deleted).
 - `TeamResourceIntegrationTest` is ordered and stateful: later cases depend on updates/deletes made by earlier cases. Preserve its ordering unless the fixture strategy is changed.
 - Native test classes inherit the JVM integration tests and are selected by the `native` tag/profile; do not duplicate test bodies in them.
