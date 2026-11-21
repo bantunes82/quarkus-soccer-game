@@ -4,6 +4,7 @@ import quarkus.soccer.game.team.dataaccessobject.CountryRepository;
 import quarkus.soccer.game.team.dataaccessobject.TeamRepository;
 import quarkus.soccer.game.team.domainobject.CountryDO;
 import quarkus.soccer.game.team.domainobject.TeamDO;
+import quarkus.soccer.game.team.exception.EntityAlreadyExistsException;
 import quarkus.soccer.game.team.exception.EntityNotFoundException;
 import quarkus.soccer.game.team.util.Range;
 
@@ -40,8 +41,13 @@ public class TeamService {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public TeamDO create(@Valid TeamDO team) {
-        Optional<CountryDO> countryDO = countryRepository.findByCountryCode(team.getCountryDO().getCode());
+    public TeamDO create(@Valid TeamDO team) throws EntityAlreadyExistsException {
+        String countryCode = team.getCountryDO().getCode();
+        if (teamRepository.existsByNameAndCountryCode(team.getName(), countryCode)) {
+            throw alreadyExists(team.getName(), countryCode);
+        }
+
+        Optional<CountryDO> countryDO = countryRepository.findByCountryCode(countryCode);
         countryDO.ifPresent(team::setCountryDO);
         teamRepository.persist(team);
 
@@ -49,13 +55,22 @@ public class TeamService {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public TeamDO update(Long teamId, @Valid TeamDO team) throws EntityNotFoundException {
+    public TeamDO update(Long teamId, @Valid TeamDO team) throws EntityNotFoundException, EntityAlreadyExistsException {
         TeamDO teamSaved = findTeamChecked(teamId);
-        Optional<CountryDO> countrySaved = countryRepository.findByCountryCode(team.getCountryDO().getCode());
+        String countryCode = team.getCountryDO().getCode();
+        if (teamRepository.existsByNameAndCountryCodeAndIdNot(team.getName(), countryCode, teamId)) {
+            throw alreadyExists(team.getName(), countryCode);
+        }
+
+        Optional<CountryDO> countrySaved = countryRepository.findByCountryCode(countryCode);
 
         updateTeam(team, teamSaved, countrySaved.orElse(team.getCountryDO()));
 
         return teamSaved;
+    }
+
+    private EntityAlreadyExistsException alreadyExists(String name, String countryCode) {
+        return new EntityAlreadyExistsException("Team with name '" + name + "' already exists for country: " + countryCode);
     }
 
     private void updateTeam(TeamDO team, TeamDO teamSaved, CountryDO countryDO) {

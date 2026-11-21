@@ -7,10 +7,13 @@ import quarkus.soccer.game.team.util.Range;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
@@ -32,7 +35,8 @@ import java.util.Optional;
 public class TeamDO {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name = "team_seq", sequenceName = "team_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "team_seq")
     private Long id;
 
     @NotBlank(message = Validation.TEAM_NAME_BLANK)
@@ -58,7 +62,7 @@ public class TeamDO {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @NotNull(message = Validation.TEAM_COUNTRY_NULL)
-    @JoinColumn(name = "country", nullable = false)
+    @JoinColumn(name = "country", nullable = false, foreignKey = @ForeignKey(name = "fk_team_country"))
     @Valid
     private CountryDO countryDO;
 

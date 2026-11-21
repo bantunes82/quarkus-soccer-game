@@ -100,7 +100,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_countCreateTeam_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_countCreateTeam_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} ",
@@ -191,7 +191,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_countDeleteTeam_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_countDeleteTeam_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} ",
@@ -282,7 +282,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_countFindRandomTeam_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_countFindRandomTeam_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} ",
@@ -373,7 +373,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_countFindTeamByCountryCode_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_countFindTeamByCountryCode_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} ",
@@ -464,7 +464,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_countFindTeamByName_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_countFindTeamByName_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} ",
@@ -555,7 +555,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_countUpdateTeam_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_countUpdateTeam_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} ",
@@ -646,7 +646,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_countUpdateTeamLevel_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_countUpdateTeamLevel_total{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} ",
@@ -737,7 +737,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_timeCreateTeam_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_timeCreateTeam_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} q={{quantile}}/",
@@ -828,7 +828,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_timeDeleteTeam_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_timeDeleteTeam_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} q={{quantile}}/",
@@ -919,7 +919,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_timeFindRandomTeam_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_timeFindRandomTeam_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} q={{quantile}}/",
@@ -1010,7 +1010,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_timeFindTeamByCountryCode_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_timeFindTeamByCountryCode_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} q={{quantile}}/",
@@ -1101,7 +1101,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_timeFindTeamByName_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_timeFindTeamByName_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} q={{quantile}}/",
@@ -1192,7 +1192,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_timeUpdateTeam_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_timeUpdateTeam_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} q={{quantile}}/",
@@ -1283,7 +1283,7 @@
          "targets": [
             {
                "datasource": "$PROMETHEUS_DS",
-               "expr": "application_quarkus_soccer_game_team_controller_TeamController_timeUpdateTeamLevel_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
+               "expr": "application_quarkus_soccer_game_team_resource_TeamResource_timeUpdateTeamLevel_seconds{env=\"$env\",job=\"$job\",instance=~\"$instance\"}",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{job}}/{{instance}} q={{quantile}}/",

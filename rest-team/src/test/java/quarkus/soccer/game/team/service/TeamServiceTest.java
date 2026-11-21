@@ -11,6 +11,7 @@ import quarkus.soccer.game.team.dataaccessobject.CountryRepository;
 import quarkus.soccer.game.team.dataaccessobject.TeamRepository;
 import quarkus.soccer.game.team.domainobject.CountryDO;
 import quarkus.soccer.game.team.domainobject.TeamDO;
+import quarkus.soccer.game.team.exception.EntityAlreadyExistsException;
 import quarkus.soccer.game.team.exception.EntityNotFoundException;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -117,19 +119,30 @@ class TeamServiceTest {
     }
 
     @Test
-    void create_ReturnsEntity() {
+    void create_ReturnsEntity() throws EntityAlreadyExistsException {
         when(countryRepository.findByCountryCode("BR")).thenReturn(Optional.of(country1));
         doNothing().when(teamRepository).persist(team1);
 
         TeamDO team = teamService.create(team1);
 
         Assertions.assertEquals(team1, team);
+        verify(teamRepository).existsByNameAndCountryCode("Sport Club Corinthians Paulista", "BR");
         verify(teamRepository).persist(team1);
         verify(countryRepository).findByCountryCode("BR");
     }
 
     @Test
-    void update_GivenExistingTeamId_ReturnsEntity() throws EntityNotFoundException {
+    void create_GivenExistingNameAndCountry_ThrowsEntityAlreadyExistsException() {
+        when(teamRepository.existsByNameAndCountryCode("Sport Club Corinthians Paulista", "BR")).thenReturn(true);
+
+        EntityAlreadyExistsException exception = Assertions.assertThrows(EntityAlreadyExistsException.class, () -> teamService.create(team1));
+
+        Assertions.assertEquals("Team with name 'Sport Club Corinthians Paulista' already exists for country: BR", exception.getMessage());
+        verify(teamRepository, never()).persist(team1);
+    }
+
+    @Test
+    void update_GivenExistingTeamId_ReturnsEntity() throws EntityNotFoundException, EntityAlreadyExistsException {
         team1.setId(1000L);
         team1.setNickName("Coringao");
         when(teamRepository.findByIdAndDeletedIsFalse(1L)).thenReturn(Optional.of(team1));
@@ -137,7 +150,19 @@ class TeamServiceTest {
         TeamDO updateTeam = teamService.update(1L, team1);
 
         verify(teamRepository).findByIdAndDeletedIsFalse(1L);
+        verify(teamRepository).existsByNameAndCountryCodeAndIdNot("Sport Club Corinthians Paulista", "BR", 1L);
         Assertions.assertEquals(team1, updateTeam);
+    }
+
+    @Test
+    void update_GivenNameAndCountryOfAnotherTeam_ThrowsEntityAlreadyExistsException() {
+        TeamDO teamSaved = TeamDO.builder().id(1L).name("Old name").level(5.0).countryDO(country1).build();
+        when(teamRepository.findByIdAndDeletedIsFalse(1L)).thenReturn(Optional.of(teamSaved));
+        when(teamRepository.existsByNameAndCountryCodeAndIdNot("Sport Club Corinthians Paulista", "BR", 1L)).thenReturn(true);
+
+        Assertions.assertThrows(EntityAlreadyExistsException.class, () -> teamService.update(1L, team1));
+
+        Assertions.assertEquals("Old name", teamSaved.getName());
     }
 
     @Test

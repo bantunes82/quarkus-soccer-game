@@ -2,9 +2,9 @@ package quarkus.soccer.game.team.container;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.apache.commons.collections4.map.HashedMap;
-import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.utility.MountableFile;
 
 import java.time.Duration;
 import java.util.Map;
@@ -12,9 +12,9 @@ import java.util.Map;
 public class IdentityAccessManagementResource implements QuarkusTestResourceLifecycleManager {
 
     private static final GenericContainer IDENTITY_ACCESS_MANAGEMENT = new GenericContainer("quay.io/keycloak/keycloak:12.0.4")
-            .withCommand("-b 0.0.0.0 -Djboss.http.port=8080 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.migration.action=import " +
+            .withCommand("-b 0.0.0.0 -Djboss.http.port=8082 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.migration.action=import " +
                     "-Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/tmp/keycloak/realms -Dkeycloak.migration.strategy=OVERWRITE_EXISTING")
-            .withClasspathResourceMapping("./keycloak/realms", "/tmp/keycloak/realms/", BindMode.READ_ONLY)
+            .withCopyFileToContainer(MountableFile.forClasspathResource("keycloak/realms/team-realm.json", 0644), "/tmp/keycloak/realms/team-realm.json")
             .withStartupTimeout(Duration.ofSeconds(120))
             .withExposedPorts(8082)
             .withEnv("DB_VENDOR", "h2")

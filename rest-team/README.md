@@ -8,8 +8,9 @@ This API allows CRUD operations on a soccer team.
 
 Before start running the application we need to start the containers
 that this application depends on, for that you need to have docker and
-docker-compose installed in your local computer. This is the command
-that you have to run:
+docker-compose installed in your local computer. The same compose file
+works on Linux and macOS (Docker Desktop or Colima, Intel or Apple
+Silicon). This is the command that you have to run:
 
 ```shell script
 /quarkus-soccer-game/infrastructure$ docker-compose -f docker-compose-linux.yaml up
@@ -17,8 +18,8 @@ that you have to run:
 
 This command it will start the containers below:
 -  Postgres
--  Keycloak
--  Prometheus
+-  Keycloak (only published for amd64, so on Apple Silicon it runs emulated and takes a bit longer to become healthy)
+-  Prometheus (scrapes the application running on the host through `host.docker.internal:8081`)
 -  Grafana
 
 ## Running the application in dev mode
@@ -40,11 +41,10 @@ mvn package
 It produces the `rest-team-1.0-runner.jar` file in the
 `/target` directory. Be aware that it is not an `--uber-jar` as the
 dependencies are copied into the `target/lib` directory. If you want to
-build an `--uber-jar`_, just add the `--uber-jar` option to the command
-line:
+build an _uber-jar_, set the Quarkus package type:
 
 ```shell script
-mvn package -PuberJar
+mvn package -Dquarkus.package.type=uber-jar
 ```
 
 The application is now runnable using `java -jar
@@ -52,7 +52,7 @@ target/rest-team-1.0-runner.jar`.
 
 ## Creating a native executable
 
-You can create a native executable using:
+You can create a native executable using (requires GraalVM 20.3 for Java 11):
 
 ```shell script
 mvn package -Pnative
@@ -67,6 +67,15 @@ mvn package -Pnative -Dquarkus.native.container-build=true
 
 You can then execute your native executable with:
 `./target/rest-team-1.0-runner`
+
+The container build always produces a Linux (x86-64) executable, so on
+macOS it must be executed inside a container, for example:
+
+```shell script
+docker create --name rest-team-native --platform linux/amd64 --network host registry.access.redhat.com/ubi8/ubi-minimal /tmp/app
+docker cp target/rest-team-1.0-runner rest-team-native:/tmp/app
+docker start -a rest-team-native
+```
 
 If you want to learn more about building native executables, please
 consult https://quarkus.io/guides/maven-tooling.html.
@@ -148,17 +157,19 @@ reports available in the IDE/command line.
 
 **Static Analyzing (SonarQube)**
 
-Running Sonar as Docker container
+Running Sonar as Docker container (the image is multi-arch, so it also runs natively on Apple Silicon)
 ```shell script
-sudo sysctl -w vm.max_map_count=262144
 /quarkus-soccer-game/infrastructure$ docker-compose -f sonarqube-docker-compose.yaml up
 ```
 This is the url to access the [SonarQube](http://localhost:9000/projects?sort=-analysis_date).
 
+In the first access, log in with `admin`/`admin` and change the password
+to `sonar` (the credentials configured in the `pom.xml`), or pass your own
+with `-Dsonar.login=<user> -Dsonar.password=<password>`.
 
 In case you have a Sonar instance running locally (or a Docker
 Container), you can execute the command `mvn clean install
-sonar:sonar` in order to observe the potential Bugs, Code smells,
+sonar:sonar` from the `rest-team` directory in order to observe the potential Bugs, Code smells,
 Technical Debt, etc. The results will be similar to this one:
 
 ![SonarQube](https://i.ibb.co/mzz8SrJ/sonar.png
