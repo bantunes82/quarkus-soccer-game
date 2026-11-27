@@ -36,4 +36,3 @@ All commands below assume the SDKMAN prefix above has been applied in the same s
 
 - The `test` profile applies `db/migration` plus `src/test/resources/db/test-data/V2__test_data.sql` instead of `db/data`: it creates only Brazil, Spain and the Corinthians team (id `-1`), which the integration tests rely on (e.g. creating Boca Juniors returns 201 and `/random` returns 404 once Corinthians is deleted).
 - `TeamResourceIntegrationTest` is ordered and stateful: later cases depend on updates/deletes made by earlier cases. Preserve its ordering unless the fixture strategy is changed.
-- Native test classes inherit the JVM integration tests and are selected by the `native` tag/profile; do not duplicate test bodies in them.
